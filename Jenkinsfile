@@ -1,12 +1,54 @@
 pipeline {
-    agent any
+    agent any  // Run on any available Jenkins agent
+
+    environment {
+        NODE_VERSION = '16'  // Specify Node.js version
+    }
+
     stages {
-        stage('Clone Repository') {
+        stage('Checkout Code') {
             steps {
-                withEnv(['GIT_SSH_COMMAND=ssh -i /root/.ssh/id_rsa -o UserKnownHostsFile=/dev/null -o StrictHostKeyChecking=no']) {
-                    sh 'git clone git@github.com:your-org/front-end.git'
-                }
+                git branch: 'main', credentialsId: '7abaf4c2-28ff-4c6f-a1d6-db7fb13e68e3', url: 'git@github.com:your-org/back-end.git'
             }
+        }
+
+        stage('Setup Node.js') {
+            steps {
+                sh 'node -v || nvm install $NODE_VERSION'  // Ensure Node.js is installed
+            }
+        }
+
+        stage('Install Dependencies') {
+            steps {
+                sh 'npm install'  // Install dependencies
+            }
+        }
+
+        stage('Build React App') {
+            steps {
+                sh 'npm run build'  // Build the project
+            }
+        }
+
+        stage('Run Tests') {
+            steps {
+                sh 'npm test'  // Run tests
+            }
+        }
+
+        stage('Deploy (Optional)') {
+            steps {
+                sh 'scp -r build/* root@localhost:/var/www/react-app'  // Deploy to server
+            }
+        }
+    }
+
+    post {
+        success {
+            echo '🎉 Build and Deployment Successful!'
+        }
+        failure {
+            echo '❌ Build Failed!'
         }
     }
 }
