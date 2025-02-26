@@ -15,7 +15,7 @@ const Layout = ({ children }) => {
             <SideNavBar/>
             
             {/* Main Content */}
-            <div className="flex-grow-1 p-4 h-auto">
+            <div className="flex-grow-1 p-4 vh-100">
                 <TopMenu />
                 <div>
                     {children}

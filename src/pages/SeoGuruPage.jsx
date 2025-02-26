@@ -1,15 +1,16 @@
 import React from 'react'
 import Layout from '../Layout/Layout'
-import PeerNews from '../components/PeerNews'
 
-const PeerUpdate = () => {
+import SeoGuru from '../components/SeoGuru/SeoGuru'
+
+const SeoGuruPage = () => {
   return (
     <>
     <Layout>
-   <PeerNews/>
+  <SeoGuru/>
   </Layout>
   </>
   )
 }
 
-export default PeerUpdate
+export default SeoGuruPage

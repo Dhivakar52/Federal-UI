@@ -1,15 +1,16 @@
 import React from 'react'
 import Layout from '../Layout/Layout'
 import PeerNews from '../components/PeerNews'
+import ProfileAccount from '../components/ProfileAccount'
 
-const PeerUpdate = () => {
+const Account = () => {
   return (
     <>
     <Layout>
-   <PeerNews/>
+   <ProfileAccount/>
   </Layout>
   </>
   )
 }
 
-export default PeerUpdate
+export default Account

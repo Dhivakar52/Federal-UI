@@ -1,0 +1,39 @@
+.accounts {
+    box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+    padding: 26px 43px;
+    width: 33%;
+    margin: 4% auto;
+}
+
+.accImage{
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+
+
+
+.profile-image-container {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .profile-image {
+     width: 128px;
+   height: 128px;
+    object-fit: cover;
+  }
+  
+  .camera-icon-overlay:hover {
+    background-color: rgba(0, 0, 0, 0.7);
+}
+.camera-icon-overlay {
+    position: absolute;
+    top: 44px;
+    right: 39px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    padding: 10px;
+    cursor: pointer;
+}
+  

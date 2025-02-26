@@ -13,6 +13,9 @@ Front end
 3. npm install axios
 4. npm i d3
 5. npm install react-toastify
+6. npm install openai
+7. npm install react-hot-toast
+
 
 //Backend 
 1. npm init -y

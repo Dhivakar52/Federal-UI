@@ -2,3 +2,19 @@
     width: 60%;
     height: 40%;
 }
+.sideNavBg {
+    border-radius: 26px 0px 0px 26px;
+    background-color: #a10037;
+    color: #ffff !important;
+    border-left: 13px solid #dc9f26;
+}
+.sideMenu{
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    color: #fff !important;
+}
+.sideMenuList{
+    color: #fff;
+    padding: 12px 20px;
+}
