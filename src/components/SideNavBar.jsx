@@ -1,113 +1,142 @@
 import React, { useContext, useState } from "react";
 import { Button, Nav } from "react-bootstrap";
-import { NavLink } from "react-router-dom"; 
-import { Menu, X, Home, Users } from "lucide-react";
-import logo from '../assets/images/logo.png';
+import { NavLink, useLocation } from "react-router-dom"; 
+import { Menu, X } from "lucide-react";
+import logo from '../assets/images/logo_federal_white.png';
 import '../css/SideNavBar.css';
-import { MenuContext } from '../App'
+import { MenuContext } from "./Context/MenuProvider";
 
 const SideNavBar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
-    // const [label, setLabel] = useState();
- const {menuItems :menuSideBar}= useContext(MenuContext);
- console.log(menuSideBar)
+  const { menuItems: menuSideBar } = useContext(MenuContext);
+  const location = useLocation(); // Get current path
 
   return (
     <>
-      {/* Sidebar */}
       <div
-        className=" text-dark vh-100"
+        className="text-dark vh-100 sideNavBg"
         style={{
-          width: isSidebarOpen ? "250px" : "80px",
+          position: "fixed",
+          top: "0",
+          left: "0",
+          width: isSidebarOpen ? "145px" : "80px",
+          height: "100vh",
           transition: "all 0.3s ease",
-          position: "relative",
-            overflow: "hidden",
           boxShadow: 'rgba(99, 99, 99, 0.2) 0px 2px 8px 0px',
         }}
       >
-        {/* Header Container */}
-        <div
-          className="d-flex align-items-center"
-          style={{
-            padding: "15px",
-              height: "70px", 
-              borderBottom: "1px solid #ddd",
-            marginBottom:"20px"
-          }}
-        >
+        <div className="sideNavInnerColor">
+          {/* Sidebar Header */}
           <div
+            className="d-flex align-items-center"
             style={{
-              width: isSidebarOpen ? "240px" : "0",
-              transition: "width 0.3s ease",
-              overflow: "hidden",
+              padding: "0px 1px 1px 7px",
+              height: "70px",
+              borderBottom: "1px solid #ddd",
+              marginBottom: "20px",
             }}
           >
-            <img
-              src={logo}
-              alt="Federal_Logo"
-              className="img-fluid"
+            <div
               style={{
-                maxHeight: "40px",
-                opacity: isSidebarOpen ? 1 : 0,
-                transition: "opacity 0.3s ease",
-                width: '60%',
-                height: '40%',
+                width: isSidebarOpen ? "145px" : "0",
+                transition: "width 0.3s ease",
+                overflow: "hidden",
               }}
-            />
-          </div>
-          <Button
-            variant=""
-            size="sm"
-            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-            className="rounded-circle"
-                      style={{
-                border: "none",
-              minWidth: "40px",
-              height: "40px",
-              padding: "0",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              marginLeft: "auto",
-            }}
-          >
-            {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
-          </Button>
-        </div>
-
-        {/* Menu Items */}
-        <Nav className="flex-column px-2">
-          {menuSideBar.map((item, index) => (
-            <NavLink
-              key={index}
-              to={item.path} // Use "to" instead of "href"
-              className="text-dark d-flex align-items-center py-2 px-2"
-              style={({ isActive }) => ({
-                textDecoration: "none",
-                whiteSpace: "nowrap",
-                backgroundColor: isActive ? "rgba(113, 193, 225, 0.1)" : "transparent",
-                transition: "all 0.3s ease",
-              })}
             >
-              <div
-                className="d-flex align-items-center"
-                style={{ minWidth: "24px" }}
-              >
-                {item.icon}
-              </div>
-              <div
+              <img
+                src={logo}
+                alt="Federal_Logo"
+                className="img-fluid"
                 style={{
-                  marginLeft: "12px",
+                  maxHeight: "40px",
                   opacity: isSidebarOpen ? 1 : 0,
-                  transition: "opacity 0.2s ease",
-                  overflow: "hidden",
+                  transition: "opacity 0.3s ease",
+                  width: '100%',
+                  height: '40%',
                 }}
-              >
-                {item.label}
-              </div>
-            </NavLink>
-          ))}
-        </Nav>
+              />
+            </div>
+            <Button
+              variant=""
+              size="sm"
+              onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+              className="rounded-circle"
+              style={{
+                border: "none",
+                minWidth: "40px",
+                height: "40px",
+                padding: "0",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                marginLeft: "auto",
+                color: "white"
+              }}
+            >
+              {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
+            </Button>
+          </div>
+
+          {/* Menu Items */}
+          <Nav className="flex-column sideMenu">
+            {menuSideBar.map((item, index) => {
+              const isActive = location.pathname === item.path; // Check active state
+              return (
+                <NavLink
+                  key={index}
+                  to={item.path}
+                  className="sideMenuList"
+                  style={{
+                    textDecoration: "none",
+                    whiteSpace: "nowrap",
+                    backgroundColor: isActive ? "#fff" : "transparent",
+                    transition: "all 0.3s ease",
+                    width: '100%',
+                    height: '65px',
+                    display: 'inline-block',
+                    justifyContent: 'end',
+                    borderRadius: '50px 0px 0px 50px',
+                    color: isActive ? "black" : "white",
+                    marginLeft: '10px',
+                    padding: isSidebarOpen ? '12px 20px' : "23px",
+                  }}
+                >
+                  <div
+                    className="d-flex align-items-center"
+                    style={{ justifyContent: 'center' }}
+                  >
+                    {/* Change icon dynamically */}
+                    {isActive ? item.activeIcon : item.icon}
+                  </div>
+                  <div
+                    style={{
+                      marginLeft: "12px",
+                      opacity: isSidebarOpen ? 1 : 0,
+                      transition: "opacity 0.2s ease",
+                      overflow: "hidden",
+                      textAlign: 'center',
+                      textWrap: 'auto'
+                    }}
+                  >
+                    {item.label}
+                  </div>
+                </NavLink>
+              );
+            })}
+          </Nav>
+        </div>
+      </div>
+
+      {/* Side Content (scrollable) */}
+      <div
+        style={{
+          marginLeft: isSidebarOpen ? "145px" : "80px",
+          padding: "0px",
+          height: "100vh",
+          overflowY: "auto",
+        }}
+      >
+        {/* Your content goes here */}
       </div>
     </>
   );

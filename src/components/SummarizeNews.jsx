@@ -108,7 +108,7 @@ const SummarizeNews = () => {
 
                   </div>
                   <div>
-                        <TrendingBtn/> 
+                        <TrendingBtn submitBtnName="Submit" clearBtnName="Clear"/> 
                   </div>
         </Col>
         <Col xs={12} md={6}>

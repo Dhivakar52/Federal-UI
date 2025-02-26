@@ -4,7 +4,8 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import '../css/Trending.css'
  
-export const TrendingBtn = ({ onSubmit, onClear }) => {
+export const TrendingBtn = ({ onSubmit, onClear,submitBtnName,clearBtnName }) => {
+  
   return (
     <>
       <Row className='mt-3'>
@@ -15,7 +16,7 @@ export const TrendingBtn = ({ onSubmit, onClear }) => {
               className='clearBtn BtnSize'
               onClick={onClear} 
             >
-              Clear
+               {clearBtnName}
             </Button>
           </div>
         </Col>
@@ -26,7 +27,7 @@ export const TrendingBtn = ({ onSubmit, onClear }) => {
             onClick={onSubmit} 
             type='submit'
           >
-            Submit
+           {submitBtnName}
           </Button>
         </Col>
       </Row>
