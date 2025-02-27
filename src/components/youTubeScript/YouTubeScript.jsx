@@ -22,12 +22,21 @@ function YouTubeScript() {
     hashtags: false,
     all: false
   });
-
+  const apiUrl = import.meta.env.VITE_API_URL;
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const story = await generateNewsStory({ ...videoContent, language });
+      const response = await fetch(`${apiUrl}/api/generate-news`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ ...videoContent, language }),
+      });
+      
+      const story = await response.json();
+      console.log(story)
       setNewsStory(story);
       toast.success('News story generated successfully!');
     } catch (error) {
