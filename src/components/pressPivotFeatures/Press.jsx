@@ -2,19 +2,12 @@ import React, { useState } from 'react';
 import { Newspaper, RotateCcw, Upload, Clipboard, Loader2, Globe2, AlertCircle, RefreshCw } from 'lucide-react';
 import Spinner from 'react-bootstrap/Spinner';
 import toast, { Toaster } from 'react-hot-toast';
-import OpenAI from 'openai';
 import { LanguageSelector } from './LanguageSelector';
 import { Disclosure } from './Disclosure';
 import { UsageInstructions } from './UsageInstructions';
 import '../../css/Press.css'
 
-const apiKey = import.meta.env.VITE_OPENAI_API_KEY;
-
-// Only initialize OpenAI client if API key is present
-const openai = apiKey ? new OpenAI({
-  apiKey,
-  dangerouslyAllowBrowser: true
-}) : null;
+const apiUrl = import.meta.env.VITE_API_URL;
 
 function App() {
   const [state, setState] = useState({
@@ -25,6 +18,8 @@ function App() {
     error: null,
   });
 
+
+ 
   const handleFileUpload = (event) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -45,9 +40,10 @@ function App() {
     }));
     toast.success('Content cleared');
   };
+  
 
   const handleGenerate = async () => {
-    if (!apiKey) {
+    if (!apiUrl) {
       toast.error('OpenAI API key is missing. Please add VITE_OPENAI_API_KEY to your .env file.');
       return;
     }
@@ -60,45 +56,28 @@ function App() {
     setState(prev => ({ ...prev, isLoading: true, error: null }));
 
     try {
-      const prompt = `As a News Desk Editor for The Federal (www.thefederal.com), transform the following press release into a news article. The article should be objective, well-structured, and maintain journalistic standards. If the target language is not English, translate it appropriately while preserving context, accuracy, and cultural nuances.
-
-Press Release:
-${state.input}
-
-Target Language: ${state.selectedLanguage}
-
-Please provide a news article that:
-1. Has a clear headline
-2. Follows news writing best practices
-3. Maintains objectivity
-4. Includes relevant context
-5. Generate hashtags and relevant SEO focussed keywords
-6. Is written in ${state.selectedLanguage} with proper cultural context`;
-
-      if (!openai) {
-        throw new Error('OpenAI client not initialized');
-      }
-
-      const completion = await openai.chat.completions.create({
-        messages: [{ role: "user", content: prompt }],
-        model: "gpt-4o-mini",
+      const response = await fetch(`${apiUrl}/privot`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          input: state.input,
+          selectedLanguage: state.selectedLanguage,
+        }),
       });
+      
+      const data = await response.json();
+      setState(prev => ({ ...prev, output: data.output, isLoading: false }));
+   
+   } catch (error) {
+      console.error("Error generating article:", error);
+      setState(prev => ({ ...prev, isLoading: false, error: "Failed to generate article. Please try again." }));
+      toast.error("Error generating article. Please check the console.");
+   }
+   
 
-      const generatedArticle = completion.choices[0]?.message?.content || '';
 
-      setState(prev => ({
-        ...prev,
-        output: generatedArticle,
-        isLoading: false,
-      }));
-    } catch (error) {
-      setState(prev => ({
-        ...prev,
-        error: 'Failed to generate article. Please try again.',
-        isLoading: false,
-      }));
-      toast.error('Failed to generate article');
-    }
   };
 
   const copyToClipboard = () => {
@@ -106,7 +85,7 @@ Please provide a news article that:
     toast.success('Copied to clipboard!');
   };
 
-  if (!apiKey) {
+  if (!apiUrl) {
     return (
       <div className=" d-flex justify-content-center align-items-center p-4">
         <div className="card p-4 w-100" style={{ maxWidth: '600px' }}>
