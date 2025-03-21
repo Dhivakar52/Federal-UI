@@ -15,11 +15,11 @@ export const MenuProvider = ({ children }) => {
     { icon: <IdCard size={20} />,activeIcon:<IdCard color="black" size={20} />,  label: "Peer News", path: "/peer" },
     { icon: <IdCard size={20} />,activeIcon:<IdCard color="black" size={20} />,  label: "Press Pivot", path: "/press-pivot" },
     { icon: <IdCard size={20} />,activeIcon:<IdCard color="black" size={20} />,  label: "Tube Scribe", path: "/youtube-script" },
-    { icon: <IdCard size={20} />,activeIcon:<IdCard color="black" size={20} />,  label: "SEO Guru", path: "/seo-guru" },
-    { icon: <IdCard size={20} />,activeIcon:<IdCard color="black" size={20} />,  label: "Editorial Mosaic", path: "/editor-mosaic" },
-    { icon: <IdCard size={20} />,activeIcon:<IdCard color="black" size={20} />,  label: "Opinion Junction", path: "/option-junction" },
-    { icon: <IdCard size={20} />,activeIcon:<IdCard color="black" size={20} />,  label: "Custom GPT", path: "/custom-gpt" },
-    { icon: <IdCard size={20} />,activeIcon:<IdCard color="black" size={20} />,  label: "The Federal Bot", path: "/federal-bot" },
+    // { icon: <IdCard size={20} />,activeIcon:<IdCard color="black" size={20} />,  label: "SEO Guru", path: "/seo-guru" },
+    // { icon: <IdCard size={20} />,activeIcon:<IdCard color="black" size={20} />,  label: "Editorial Mosaic", path: "/editor-mosaic" },
+    // { icon: <IdCard size={20} />,activeIcon:<IdCard color="black" size={20} />,  label: "Opinion Junction", path: "/option-junction" },
+    // { icon: <IdCard size={20} />,activeIcon:<IdCard color="black" size={20} />,  label: "Custom GPT", path: "/custom-gpt" },
+    // { icon: <IdCard size={20} />,activeIcon:<IdCard color="black" size={20} />,  label: "The Federal Bot", path: "/federal-bot" },
     { icon: <IdCard size={20} />,activeIcon:<IdCard color="black" size={20} />,  label: "Accounts", path: "/account" },
   ];
 
