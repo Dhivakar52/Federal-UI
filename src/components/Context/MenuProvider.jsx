@@ -27,6 +27,9 @@ export const MenuProvider = ({ children }) => {
     { name: "Admin", email: "admin@gmail.com", password: "1" },
     { name: "Dhivakar", email: "dhiva@gmail.com", password: "2" },
     { name: "Vengat", email: "vengat@gmail.com", password: "3" },
+    { name: "Indira", email: "indirab@thefederal.in", password: "Fed@123" },
+    { name: "Srinivasan", email: "srinivasans@thefederal.in", password: "Fed@123" },
+     { name: "Mahalingam", email: "mahalingamp@thefederal.in", password: "Fed@123" },
   ];
 
   return (
