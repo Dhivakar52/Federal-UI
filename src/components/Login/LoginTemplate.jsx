@@ -34,7 +34,7 @@ const LoginTemplate = () => {
         sessionStorage.setItem("userEmail", loginId);
         sessionStorage.setItem("userName", result.data.name);
       
-        navigate('/trends');  
+        navigate('/summary');  
       }
     } catch (err) {
       console.error('Error during login:', err.response ? err.response.data : err.message);
