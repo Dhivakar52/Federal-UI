@@ -1,10 +1,14 @@
 import React from 'react'
+import { Outlet } from 'react-router-dom'
 
 const CustomGpt = () => {
   return (
+    <>
     <div>
-         Hi Custom Gpt
-    </div> 
+       <h1>Custom-GPT</h1>
+    </div>
+         <Outlet/>
+         </>
   )
 }
 

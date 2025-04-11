@@ -9,7 +9,7 @@ export const TrendingBtn = ({ onSubmit, onClear,submitBtnName,clearBtnName }) =>
   return (
     <>
       <Row className='mt-3'>
-        <Col xs={6}>
+        <Col md={6} xs={12} className='mb-3'>
           <div>
             <Button
               variant="primary"
@@ -20,7 +20,7 @@ export const TrendingBtn = ({ onSubmit, onClear,submitBtnName,clearBtnName }) =>
             </Button>
           </div>
         </Col>
-        <Col xs={6}>
+        <Col md={6} xs={12} className='mb-3'>
           <Button
             variant="secondary"
             className='submitBtn BtnSize'

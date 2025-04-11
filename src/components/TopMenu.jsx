@@ -1,28 +1,18 @@
-import React,{useState,useEffect} from "react";
-import { Navbar, Nav, Dropdown, Container, Tooltip, OverlayTrigger } from "react-bootstrap";
+import React,{useState,useEffect,useContext} from "react";
+import { Navbar, Nav, Dropdown, Container, Tooltip, OverlayTrigger, Row, Col,Breadcrumb } from "react-bootstrap";
 import { Bell, Settings, User } from "lucide-react";
 import { useLocation, useNavigate } from 'react-router-dom';
 import Image from 'react-bootstrap/Image';
 import '../css/TopMenu.css';
+import { MenuContext } from "./Context/MenuProvider";
+import axios from 'axios';
 
 const TopMenu = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  
-
-  const [initial, setInitial] = useState("");
-
-
-  const userEmail = sessionStorage.getItem("userEmail");
-  const userName= sessionStorage.getItem("userName");
-
-  useEffect(() => {
-    const userEmail = sessionStorage.getItem("userEmail");
-    if (userEmail) {
-      setInitial(userEmail.charAt(0).toUpperCase());
-    }
-  }, []);
-
+   const { userName, setUserName, userEmail } = useContext(MenuContext);
+   const apiUrl = import.meta.env.VITE_API_URL;
+ 
 
 
 
@@ -32,7 +22,7 @@ const TopMenu = () => {
       case '/summary': return 'Summary';
       case '/flashcard': return 'Flash-Card';
       case '/peer': return 'Peer News';
-      case '/account': return 'Profie Account';
+      case '/account': return 'Profile Account';
       case '/account/reset': return 'Reset Password';
       case '/press-pivot': return 'Press-Pivot';
       case '/youtube-script': return 'Tube Scribe';
@@ -40,15 +30,53 @@ const TopMenu = () => {
       case '/editor-mosaic': return 'Editorial Mosaic';
       case '/option-junction': return 'Opinion Junction';
       case '/custom-gpt': return 'Custom GPT';
+      case '/custom-gpt/federal-assist': return 'Federal Assistant';
+      case '/custom-gpt/federal-editorial': return 'Federal Editorial';
       case '/federal-bot': return 'The Federal Bot';
       default: return '';
     }
   };
 
-  const handleLogout = () => {
-    navigate('/');
-    sessionStorage.clear();
-  };
+  // const handleLogout = () => {
+  //   navigate('/');
+  //   sessionStorage.clear();
+  // };
+
+
+
+
+  const handleLogout = async () => {
+    try {
+        const loginId = sessionStorage.getItem("userEmail");
+
+        const response = await axios.post(`${apiUrl}/logout`, { loginId });
+
+        if (response.status === 200) {
+            const { lastLogout } = response.data;
+            console.log(response.data)
+
+            // Store last logout time
+            sessionStorage.setItem("lastLogout", lastLogout);
+
+            console.log('Logout successful:', lastLogout);
+
+            // Clear session storage
+            sessionStorage.removeItem("userEmail");
+            sessionStorage.removeItem("userName");
+
+            navigate('/'); // Redirect to login
+        }
+    } catch (error) {
+        console.error('Logout error:', error.response?.data || error.message);
+    }
+};
+
+
+
+
+
+
+
 
   const AccountNavigation = () => {
     navigate('/account');
@@ -56,22 +84,27 @@ const TopMenu = () => {
   return (
     <Navbar bg="light" variant="light" className="shadow-sm mb-4">
       <Container fluid>
-        <Navbar.Brand className="fw-normal">
-          Dashboard / <span className="sideLabel">{getLabel()}</span>
-        </Navbar.Brand>
-
-        <Navbar.Toggle aria-controls="navbar-nav" />
+         <Row className="w-100 align-items-end">
+         <Col xl={3} md={6} xs={9}>
+  <Breadcrumb>
+    <Breadcrumb.Item className="breadCrumbMain">Dashboard</Breadcrumb.Item>
+     <span className="mx-2">&gt;</span>
+    <Breadcrumb.Item active className="custom-breadcrumb "> {getLabel()}</Breadcrumb.Item>
+  </Breadcrumb>
+</Col>
+             <Col xl={9} md={6} xs={3}>
+             <Navbar.Toggle aria-controls="navbar-nav" />
         <Navbar.Collapse id="navbar-nav" className="justify-content-end">
           <Nav className="align-items-center">
             <OverlayTrigger placement="bottom" overlay={<Tooltip id="tooltip-notifications">Notifications</Tooltip>}>
               <Nav.Link href="#notifications" className="d-flex align-items-center">
-                <Bell size={20} className="me-2" />
+                <Bell size={20} className="me-2 d-none d-lg-block" />
               </Nav.Link>
             </OverlayTrigger>
 
             <OverlayTrigger placement="bottom" overlay={<Tooltip id="tooltip-settings">Settings</Tooltip>}>
               <Nav.Link href="#settings" className="d-flex align-items-center">
-                <Settings size={20} className="me-2" />
+                <Settings size={20} className="me-2 d-none d-lg-block" />
               </Nav.Link>
             </OverlayTrigger>
 
@@ -82,8 +115,8 @@ const TopMenu = () => {
                   {/* <span className="avatar-text">{initial}</span> */}
                   <Image src={`https://avatar.iran.liara.run/username?username=${userEmail}`} width="40" roundedCircle />
                   <div className="mt-3 text-start fw-medium">
-                  <p className="mb-0">{userEmail}</p>
-                  <p>{userName}</p>
+                  <p className="mb-0 d-none d-md-block">{userEmail}</p>
+                  <p className="mb-0 d-none d-md-block">{userName}</p>
                   </div>
                  
                 </div>
@@ -98,10 +131,10 @@ const TopMenu = () => {
                   <User size={20} className="me-2" />
                   View Profile
                 </Dropdown.Item>
-                <Dropdown.Item href="#settings" >
+                {/* <Dropdown.Item href="#settings" >
                   <Settings size={20} className="me-2" />
                   Account Settings
-                </Dropdown.Item>
+                </Dropdown.Item> */}
                 <Dropdown.Divider />
                 <Dropdown.Item onClick={handleLogout}>
                   <Bell size={20} className="me-2" />
@@ -111,6 +144,11 @@ const TopMenu = () => {
             </Dropdown>
           </Nav>
         </Navbar.Collapse>
+             </Col>
+         </Row>
+     
+
+      
       </Container>
     </Navbar>
   );

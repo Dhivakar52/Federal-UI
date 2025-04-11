@@ -112,7 +112,7 @@ function TrendingSelect({ selectedState,setSelectedState,region , setRegion }) {
   return (
     <>
       <Row>
-        <Col xs={6}>
+        <Col xl={6} md={12} xs={12} >
           <div>
             <Card className="p-3 trendingBox border-0">
               <Form.Label htmlFor="state">Select State/Region</Form.Label>
@@ -137,14 +137,14 @@ function TrendingSelect({ selectedState,setSelectedState,region , setRegion }) {
 
 
           <Row>
-             <Col xs={12}>                               
+             <Col md={12} xs={12} className='mb-3' >                               
                                   <div>
                                      <IndiaMap region={region}  setRegion={setRegion} onStateSelect={handleStateSelect} />
                                   </div>
                           </Col>
           </Row>
         </Col>
-        <Col xs={6}>
+        <Col xl={6} md={12} xs={12} >
           <div>
             <TrendingText topics={trendingTopics} loading={loading} />
           </div>

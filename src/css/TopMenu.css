@@ -11,4 +11,20 @@
     font-size: 16px;
     text-transform: uppercase;
   }
-  
+  .custom-breadcrumb {
+   background-color: #fc9f00;
+   color: #ffff !important;
+   border-radius: 20px;
+   padding: 0px 20px ;
+   line-height: 1.6;
+}
+.breadCrumbMain{
+  /* background: #520f0f !important;
+  color: #ffff !important;
+  border-radius: 20px;
+  padding: 0px 20px ; */
+}
+.breadCrumbMain a{
+  text-decoration: none;
+  color: #a10037 !important;
+}

@@ -1,35 +1,47 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Container, Row, Col, Form, Button, Card, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react'; 
 import  logoIcon from '../assets/images/logo.png'
 import  sideImg from '../assets/images/sideImg.png'
+import { MenuContext, MenuProvider } from '../components/Context/MenuProvider';
 import '../css/Login.css';
 
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
+  const [showPassword, setShowPassword] = useState(false); 
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const {users}= useContext(MenuContext);
 
+
+  
   const navigate = useNavigate();
+
+ 
+
 
   const handleLogin = async (e) => {
     e.preventDefault();
     setError('');
     setSuccess('');
-
-    // Simulating a login API request
+ 
+  
     setTimeout(() => {
-      if (email === 'admin@gmail.com' && password === '1') {
+      const user = users.find(u => u.email === email && u.password === password);
+  
+      if (user) {
         setSuccess('Login Successful!');
+        sessionStorage.setItem("userEmail", user.email);
+        sessionStorage.setItem("userName", user.name);
         navigate('/trends');
       } else {
         setError('Invalid email or password');
       }
-    }, 2000); // Simulate network delay
+    }, 2000); 
   };
+  
 
   return (
     <section >
@@ -98,7 +110,7 @@ const LoginPage = () => {
               id="rememberMe" 
               label="Remember Me" 
             />
-            <a href="javascript:void" className="text-primary" style={{ textDecoration: 'none' }}>
+            <a href="#" className="text-primary" style={{ textDecoration: 'none' }}>
               Forgot Password?
             </a>
           </div>

@@ -23,7 +23,7 @@ const IndiaMap = ({ onStateSelect, region, setRegion }) => {
         svg.selectAll('*').remove(); // Clear any existing content
 
         const projection = d3.geoMercator()
-          .center([45.9629, 23.5937]) // Center of India
+          .center([60.9629, 23.5937]) // Center of India
           .scale(500)
           .translate([width / 2, height / 2]);
 
@@ -98,6 +98,8 @@ const IndiaMap = ({ onStateSelect, region, setRegion }) => {
     renderMap();
   }, [selectedState, onStateSelect, region, setRegion]);
 
+
+
   useEffect(() => {
     if (region) {
       setSelectedState(region);
@@ -105,7 +107,7 @@ const IndiaMap = ({ onStateSelect, region, setRegion }) => {
   }, [region]);
 
   return (
-    <div className="mapContainer">
+    <div className="mapContainer ">
       <div className="mapBoxShadow">
         <svg 
           ref={svgRef}

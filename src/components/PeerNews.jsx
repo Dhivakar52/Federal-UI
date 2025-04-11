@@ -40,7 +40,7 @@ function PeerNews() {
       <p>Select a news source from the dropdown to view its latest headlines with clickable links.</p>
 
       <Row className="mb-4">
-        <Col sm={12} md={6}>
+        <Col sm={12} md={12} xl={6}  className="mb-4">
           <Form.Select
             onChange={(e) => setSelectedSource(e.target.value)}
             value={selectedSource}
@@ -55,7 +55,7 @@ function PeerNews() {
           </Form.Select>
         </Col>
 
-        <Col sm={12} md={6}>
+        <Col sm={12} md={12} xl={6}>
         <div className='border p-2'>
         {loading ? (
     <div className="d-flex justify-content-center">

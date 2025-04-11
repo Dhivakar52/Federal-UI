@@ -107,9 +107,12 @@ function App() {
 
   return (
     <div className="">
-      <div className="bg-dark text-white py-5 mb-5 position-relative">
+      <div className=" text-white py-5 mb-5 position-relative custom-color">
         <div className="container-fluid">
-          <div className="d-flex justify-content-between align-items-center">
+           <div className="row">
+           <div className="d-md-flex d-block
+           
+           justify-content-md-between justify-content-start align-items-center">
             <div className="d-flex align-items-center">
              
               <div>
@@ -129,6 +132,8 @@ function App() {
               </div>
             </div>
           </div>
+           </div>
+         
         </div>
       </div>
 
@@ -136,7 +141,7 @@ function App() {
         <div className="row">
           <div className="col-lg-9">
             <div className="row">
-              <div className="col-md-6 mb-4">
+              <div className="col-xl-6 col-md-12 mb-4">
                 <div className="d-flex justify-content-between align-items-center mb-3">
                   <h2 className="h5 font-weight-semibold text-dark">Input</h2>
                   <div className="d-flex gap-2">
@@ -153,7 +158,7 @@ function App() {
                       <input
                         type="file"
                         accept=".txt"
-                        className="d-none"
+                        className="d-none "
                         onChange={handleFileUpload}
                       />
                     </label>
@@ -163,13 +168,13 @@ function App() {
                   value={state.input}
                   onChange={(e) => setState(prev => ({ ...prev, input: e.target.value }))}
                   placeholder="Paste your press release here..."
-                  className="form-control h-100"
+                  className="form-control h-100 mb-5"
                 />
               </div>
 
-              <div className="col-md-6 mb-4">
+              <div className="col-xl-6 col-md-12 mb-4">
 
-                  <div className="row mb-3">
+                  <div className="row mb-3 mt-4 mt-lg-0">
                      <div className="col-md-2">
                      <h2 className="h5 font-weight-semibold text-dark">Output</h2>
                      </div>
@@ -212,7 +217,7 @@ function App() {
                   <button
                     onClick={handleGenerate}
                     disabled={state.isLoading || !state.input}
-                    className="btn btn-primary"
+                    className="btn btn-warning"
                   >
                     Generate Article
                   </button>

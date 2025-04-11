@@ -23,3 +23,8 @@ Front end
 3. node server.js
 4. npm install -g nodemon
 5. npm install node-cache
+
+
+//Database
+1.npm install mongoose
+2.npm install bcryptjs - password

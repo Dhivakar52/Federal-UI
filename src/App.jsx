@@ -3,7 +3,8 @@ import './App.css'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Trends from './pages/Trends';
 import Summarize from './pages/Summarize';
-import LoginPage from './pages/Login';
+import Register from './pages/Register';
+import LoginPage from './pages/LoginPage';
 import FlashCard from './pages/FlashCard';
 import PeerUpdate from './pages/PeerUpdate';
 import PageNotFound from './pages/PageNotFound';
@@ -18,12 +19,15 @@ import AccountReset from './components/acccountFeatures/AccountReset';
 import AccountForm from './components/acccountFeatures/AccountForm';
 import CustomGptPage from './pages/CustomGptPage';
 import FederalBotPage from './pages/FederalBotPage';
+import FederalAssist from './components/Custom_GPT/CustomGptSubMenu/FederalAssist'
+import FederalEditorial from './components/Custom_GPT/CustomGptSubMenu/FederalEditorial'
 
 function App() {
   return (
     <MenuProvider>
      <Router>
       <Routes>
+        <Route path="/register" element={<Register/>} />
         <Route path="/" element={<LoginPage/>} />
         <Route path="/trends" element={<Trends/>} />
         <Route path="/summary" element={<Summarize  />} />
@@ -34,11 +38,15 @@ function App() {
         <Route path="/seo-guru" element={<SeoGuruPage />} />
         <Route path="/editor-mosaic" element={<EditorMosaicPage />} />
         <Route path="/option-junction" element={<OpinionPage />} />
-        <Route path="/custom-gpt" element={<CustomGptPage />} />
+        {/* <Route path="/custom-gpt" element={<CustomGptPage />} /> */}
         <Route path="/federal-bot" element={<FederalBotPage />} />
         <Route path="/account" element={<Account />} >
              <Route index element={<AccountForm/>} /> 
              <Route path='reset' element={<AccountReset/>} /> 
+        </Route>
+        <Route path="/custom-gpt" element={<CustomGptPage />} >
+             <Route  path="federal-assist"  element={<FederalAssist/>} /> 
+             <Route path='federal-editorial' element={<FederalEditorial/>} /> 
         </Route>
         <Route path="*" element={<PageNotFound/>} />
       </Routes>
