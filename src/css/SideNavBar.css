@@ -5,16 +5,134 @@
 .sideNavBg {
     border-radius: 26px 0px 0px 26px;
     background-color: #a10037;
-    color: #ffff !important;
+    color: #ffffff !important;
     border-left: 13px solid #dc9f26;
+    position: fixed; 
+    top: 0;
+    left: 0;
+    height: 100vh;
+    transition: transform 0.3s ease-in-out; 
+    box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px; 
 }
+.sideFlex {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0px 1px 1px 7px; 
+    height: 70px;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 20px;
+}
+
+.logoImg {
+    transition: transform 0.3s ease-in-out;
+    overflow: hidden;
+}
+
+.logoImg img {
+    max-height: 40px;
+    transition: opacity 0.3s ease;
+    width: 70%;
+    height: 40%;
+}
+
+.logoXbutton {
+    border: none;
+    min-width: 40px;
+    height: 40px;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: auto;
+    color: white;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .sideMenu{
     display: flex;
     justify-content: center;
     align-items: end;
     color: #fff !important;
 }
-.sideMenuList{
+.sideMenu a{
+    text-decoration: none;
+    width: 100%;
+}
+.sideMenuList {
+    text-decoration: none; 
+    white-space: nowrap; 
     color: #fff;
     padding: 12px 20px;
+    width: 100%; 
+    height: 100%;
+    display: flex;
+    justify-content: flex-start; 
+    border-radius: 50px 0px 0px 50px;
+    margin-left: 0px;
+    margin-bottom: 5px;
+    text-align: center;
+    position: relative;
+}
+
+
+
+.sideMenuList:hover{
+    background-color: #dc9f26 !important;
+}
+
+
+.submenu {
+    position: absolute;
+    bottom: -30px;
+    background-color: #ccc;
+    padding: 10px;
+   width: 100%;
+   min-width: 250px;
+    border-radius: 5px;
+    z-index: 1000;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.sideContent {
+    padding: 0px;
+    height: 100vh;
+    overflow-y: auto; 
+}
+
+.submenu::before {
+    content: "";
+    position: absolute;
+    top: 29%;
+    left: 0%;
+    margin-left: -22px;
+    border-width: 11px;
+    border-style: solid;
+    border-color: transparent #555 transparent transparent;
+}
+
+.submenu-item:hover{
+    background-color: #555 !important;
+}
+
+.itemLabel {
+    margin-left: 12px;
+    transition: opacity 0.2s ease;
+    overflow: hidden;
+    text-align: center;
+    white-space: normal;
 }

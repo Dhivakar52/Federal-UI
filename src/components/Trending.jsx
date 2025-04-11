@@ -18,7 +18,7 @@ export const Trending = () => {
   return (
       <Container fluid>
             <Row>
-              <Col xs={12}>
+              <Col  xs={12} >
                    <div className='trendingTitle'>
                       <h1>Google Trends - Trending Now</h1>
                       <p>Select a state/region to view the trending topics. The data is sourced from Google Trends RSS feeds.</p>

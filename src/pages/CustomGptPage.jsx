@@ -1,6 +1,6 @@
 import React from 'react'
 import Layout from '../Layout/Layout'
-//import CustomGpt from '../components/Custom_Gpt/CustomGpt'
+import CustomGpt from '../components/Custom_GPT/CustomGpt'
 
 const CustomGptPage = () => {
   return (
@@ -12,4 +12,4 @@ const CustomGptPage = () => {
   )
 }
 
-export default CustomGptPage
+export default CustomGptPage;

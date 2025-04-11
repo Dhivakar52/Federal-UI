@@ -36,7 +36,7 @@ const FlashCardGenerator = () => {
       const startTime = performance.now(); // Record start time
     //  console.log(process.env.REACT_APP_FRONT_PORT_URL);
     const apiUrl = import.meta.env.VITE_API_URL;
-      const response  = await fetch( apiUrl, {
+      const response  = await fetch(`${apiUrl}/flash`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -109,7 +109,7 @@ const FlashCardGenerator = () => {
         <Col xs={12}>
           <Form onSubmit={handleSubmit} className="mt-4">
             <Row>
-              <Col xs={12} md={6}>
+              <Col xs={12} md={12} xl={6}>
                 <div className="summaryBox">
                   <div className="mb-3">
                     <Form.Label className="text-sm font-medium">URL</Form.Label>
@@ -137,7 +137,7 @@ const FlashCardGenerator = () => {
 
 
               
-              <Col xs={12} md={6}>
+              <Col xs={12} md={12} xl={6}>
                 <div style={{ position: 'relative' }}>
                   <Form.Label className="text-sm font-medium">OUTPUT</Form.Label>
                   <Form.Control

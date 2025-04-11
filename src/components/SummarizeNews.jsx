@@ -80,7 +80,7 @@ const SummarizeNews = () => {
               <Col xs={12} md={12}>
                     <Form onSubmit={handleSubmit} className="mt-4">
                   <Row>
-                       <Col xs={12} md={6}>
+                       <Col xs={12} md={12} xl={6}>
           <div className='summaryBox'>
             <div className="mb-3">
               <Form.Label className="text-sm font-medium">News Article URL</Form.Label>
@@ -111,7 +111,7 @@ const SummarizeNews = () => {
                         <TrendingBtn submitBtnName="Submit" clearBtnName="Clear"/> 
                   </div>
         </Col>
-        <Col xs={12} md={6}>
+        <Col xs={12} md={12} xl={6}>
           <div>
                       <div className="">
                           <div className='summaryBox'>
