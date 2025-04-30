@@ -22,23 +22,41 @@ const LoginTemplate = () => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
-
+  
     try {
-      const result = await axios.post(`${apiUrl}`, { loginId, password  });
-      console.log(loginId, password ,name, result.data )
-
+      const result = await axios.post(`${apiUrl}`, { loginId, password });
+  
+      // Debug: log full response
+      console.log("Login request payload:", { loginId, password });
+      console.log("Login response:", result.data);
+  
       if (result.data.message === "Login successful") {
         setLastLogin(result.data.lastLogin);
         setSuccess("Login successful!");
         sessionStorage.removeItem("lastLogout");
         sessionStorage.setItem("userEmail", loginId);
         sessionStorage.setItem("userName", result.data.name);
-      
-        navigate('/summary');  
+        navigate('/trends');
+      } else {
+        // Fallback if "message" is not exactly "Login successful"
+        setError(result.data.message || "Unexpected response from server");
       }
+  
     } catch (err) {
-      console.error('Error during login:', err.response ? err.response.data : err.message);
-      setError(err.response ? err.response.data.message : 'Error during login');
+      console.error('Error during login:', err);
+  
+      let errorMessage = 'Error during login';
+  
+      if (err.response && err.response.data) {
+        // Attempt to extract common error fields
+        errorMessage = err.response.data.message ||
+                       err.response.data.error ||
+                       JSON.stringify(err.response.data);
+      } else if (err.message) {
+        errorMessage = err.message;
+      }
+  
+      setError(errorMessage);
     }
   };
 
