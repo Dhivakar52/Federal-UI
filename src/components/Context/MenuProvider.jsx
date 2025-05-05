@@ -32,6 +32,7 @@ export const MenuProvider = ({ children }) => {
 
   const [userName, setUserName] = useState(sessionStorage.getItem("userName") || "");
   const [userEmail, setUserEmail] = useState(sessionStorage.getItem("userEmail") || "");
+ 
 
   // Update sessionStorage when userName or userEmail changes
   useEffect(() => {

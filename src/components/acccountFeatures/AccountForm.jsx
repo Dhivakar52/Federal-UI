@@ -8,14 +8,16 @@ import Image from 'react-bootstrap/Image';
 import { Camera } from "lucide-react";
 
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { MenuContext } from "../Context/MenuProvider";
 
 const AccountForm = () => {
   const navigate = useNavigate();
 
   // Get initial values from sessionStorage
-  const { userName, setUserName, userEmail } = useContext(MenuContext);
+  // const { userName, setUserName, userEmail } = useContext(MenuContext);
   const [image, setImage] = useState(null);
+     const { userName, userEmail } = useSelector((state) => state.auth);
 
   // Function to handle username change dynamically
   const handleUserNameChange = (e) => {
@@ -53,7 +55,7 @@ const AccountForm = () => {
               <div className='text-center mb-3'>
                 <div className="profile-image-container">
                   <Image
-                    src={image || `https://avatar.iran.liara.run/username?username=${userEmail}`}
+                    src={image || `https://avatar.iran.liara.run/username?username=${userName}`}
                     roundedCircle
                     loading='lazy'
                     className="profile-image"

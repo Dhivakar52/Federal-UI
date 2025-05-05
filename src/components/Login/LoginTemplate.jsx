@@ -4,6 +4,8 @@ import {  Form, Button, Card, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react'; 
 import logoIcon from '../../assets/images/logo.png';
+import { useDispatch } from 'react-redux';
+import { login } from '../../redux/authSlice';
 
 import '../../css/Login.css';
 
@@ -17,7 +19,8 @@ const LoginTemplate = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const navigate = useNavigate();
-   
+  const dispatch = useDispatch();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
@@ -25,7 +28,7 @@ const LoginTemplate = () => {
 
     try {
       const result = await axios.post(`${apiUrl}`, { loginId, password  });
-      console.log(loginId, password ,name, result.data )
+      console.log(loginId, password, result.data.name, result.data);
 
       if (result.data.message === "Login successful") {
         setLastLogin(result.data.lastLogin);
@@ -33,6 +36,10 @@ const LoginTemplate = () => {
         sessionStorage.removeItem("lastLogout");
         sessionStorage.setItem("userEmail", loginId);
         sessionStorage.setItem("userName", result.data.name);
+        dispatch(login({
+          userName: result.data.name,
+          userEmail: loginId,
+        }));
       
         navigate('/summary');  
       }
