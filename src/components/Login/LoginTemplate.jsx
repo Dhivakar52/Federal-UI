@@ -4,6 +4,8 @@ import {  Form, Button, Card, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react'; 
 import logoIcon from '../../assets/images/logo.png';
+import { useDispatch } from 'react-redux';
+import { login } from '../../redux/authSlice';
 
 import '../../css/Login.css';
 
@@ -17,29 +19,38 @@ const LoginTemplate = () => {
   const apiUrl = import.meta.env.VITE_API_URL;
 
   const navigate = useNavigate();
-   
+  const dispatch = useDispatch();
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
   
     try {
-      const result = await axios.post(`${apiUrl}`, { loginId, password });
-  
-      // Debug: log full response
-      console.log("Login request payload:", { loginId, password });
-      console.log("Login response:", result.data);
-  
+
+      const result = await axios.post(`${apiUrl}`, { loginId, password  });
+      console.log(loginId, password, result.data.name, result.data);
+
+
       if (result.data.message === "Login successful") {
         setLastLogin(result.data.lastLogin);
         setSuccess("Login successful!");
         sessionStorage.removeItem("lastLogout");
         sessionStorage.setItem("userEmail", loginId);
         sessionStorage.setItem("userName", result.data.name);
-        navigate('/trends');
+
+        dispatch(login({
+          userName: result.data.name,
+          userEmail: loginId,
+        }));
+      
+        navigate('/summary');  
+
+     
       } else {
         // Fallback if "message" is not exactly "Login successful"
         setError(result.data.message || "Unexpected response from server");
+
       }
   
     } catch (err) {

@@ -15,6 +15,8 @@ Front end
 5. npm install react-toastify
 6. npm install openai
 7. npm install react-hot-toast
+8. npm install @reduxjs/toolkit
+9. npm install react-redux
 
 
 //Backend 

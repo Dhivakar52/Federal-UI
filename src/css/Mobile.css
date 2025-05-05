@@ -13,6 +13,7 @@
     position: sticky;
     top: 0;
     z-index: 999;
+    height: 65px;
 }
 .btn-close{
     color: #ffff;

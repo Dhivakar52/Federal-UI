@@ -1,4 +1,5 @@
 import React,{useState,useEffect,useContext} from "react";
+import { useSelector } from 'react-redux';
 import { Navbar, Nav, Dropdown, Container, Tooltip, OverlayTrigger, Row, Col,Breadcrumb } from "react-bootstrap";
 import { Bell, Settings, User } from "lucide-react";
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -10,11 +11,11 @@ import axios from 'axios';
 const TopMenu = () => {
   const location = useLocation();
   const navigate = useNavigate();
-   const { userName, setUserName, userEmail } = useContext(MenuContext);
+  //  const { userName, userEmail } = useContext(MenuContext);
    const apiUrl = import.meta.env.VITE_API_URL;
- 
+   const { userName, userEmail } = useSelector((state) => state.auth);
 
-
+console.log(userName, "Topmenu")
 
   const getLabel = () => {
     switch (location.pathname) {
@@ -86,7 +87,7 @@ const TopMenu = () => {
       <Container fluid>
          <Row className="w-100 align-items-end">
          <Col xl={3} md={6} xs={9}>
-  <Breadcrumb>
+  <Breadcrumb className="topTitle">
     <Breadcrumb.Item className="breadCrumbMain">Dashboard</Breadcrumb.Item>
      <span className="mx-2">&gt;</span>
     <Breadcrumb.Item active className="custom-breadcrumb "> {getLabel()}</Breadcrumb.Item>
@@ -113,10 +114,10 @@ const TopMenu = () => {
               <Dropdown.Toggle variant="" id="dropdown-profile" className="d-flex align-items-center border-0">
                 <div className="d-flex align-items-center gap-3 me-2">
                   {/* <span className="avatar-text">{initial}</span> */}
-                  <Image src={`https://avatar.iran.liara.run/username?username=${userEmail}`} width="40" roundedCircle />
-                  <div className="mt-3 text-start fw-medium">
+                  <Image src={`https://avatar.iran.liara.run/username?username=${userName}`} width="40" roundedCircle />
+                  <div className=" text-start fw-medium userAcc">
                   <p className="mb-0 d-none d-md-block">{userEmail}</p>
-                  <p className="mb-0 d-none d-md-block">{userName}</p>
+                  <small className="mb-0 d-none d-md-block">{userName}</small>
                   </div>
                  
                 </div>
