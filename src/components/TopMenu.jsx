@@ -15,7 +15,6 @@ const TopMenu = () => {
    const apiUrl = import.meta.env.VITE_API_URL;
    const { userName, userEmail } = useSelector((state) => state.auth);
 
-console.log(userName, "Topmenu")
 
   const getLabel = () => {
     switch (location.pathname) {
@@ -54,7 +53,7 @@ console.log(userName, "Topmenu")
 
         if (response.status === 200) {
             const { lastLogout } = response.data;
-            console.log(response.data)
+            // console.log(response.data)
 
             // Store last logout time
             sessionStorage.setItem("lastLogout", lastLogout);

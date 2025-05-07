@@ -28,7 +28,7 @@ const LoginTemplate = () => {
 
     try {
       const result = await axios.post(`${apiUrl}`, { loginId, password  });
-      console.log(loginId, password, result.data.name, result.data);
+      // console.log(loginId, password, result.data.name, result.data);
 
       if (result.data.message === "Login successful") {
         setLastLogin(result.data.lastLogin);
