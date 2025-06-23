@@ -25,12 +25,10 @@ const LoginTemplate = () => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
-  
+    
     try {
-
       const result = await axios.post(`${apiUrl}`, { loginId, password  });
-      // console.log(loginId, password, result.data.name, result.data);
-
+      // console.log(loginId, password, result.data.role, result.data.name, result.data);
 
       if (result.data.message === "Login successful") {
         setLastLogin(result.data.lastLogin);
@@ -38,36 +36,26 @@ const LoginTemplate = () => {
         sessionStorage.removeItem("lastLogout");
         sessionStorage.setItem("userEmail", loginId);
         sessionStorage.setItem("userName", result.data.name);
-
         dispatch(login({
           userName: result.data.name,
           userEmail: loginId,
+          userRole: result.data.role,
         }));
       
-        navigate('/summary');  
-
-     
+        
+        if (result.data.role?.toLowerCase() === 'admin') {
+          navigate('/admin-dashboard');
+        } else {
+          navigate('/summary');
+        }
       } else {
-        // Fallback if "message" is not exactly "Login successful"
-        setError(result.data.message || "Unexpected response from server");
+        setError('Invalid credentials');
+      }
 
-      }
-  
+
     } catch (err) {
-      console.error('Error during login:', err);
-  
-      let errorMessage = 'Error during login';
-  
-      if (err.response && err.response.data) {
-        // Attempt to extract common error fields
-        errorMessage = err.response.data.message ||
-                       err.response.data.error ||
-                       JSON.stringify(err.response.data);
-      } else if (err.message) {
-        errorMessage = err.message;
-      }
-  
-      setError(errorMessage);
+      console.error('Error during login:', err.response ? err.response.data : err.message);
+      setError(err.response ? err.response.data.message : 'Error during login');
     }
   };
 

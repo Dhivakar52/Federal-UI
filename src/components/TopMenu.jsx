@@ -15,6 +15,7 @@ const TopMenu = () => {
    const apiUrl = import.meta.env.VITE_API_URL;
    const { userName, userEmail } = useSelector((state) => state.auth);
 
+console.log(userName, "Topmenu")
 
   const getLabel = () => {
     switch (location.pathname) {
@@ -33,6 +34,7 @@ const TopMenu = () => {
       case '/custom-gpt/federal-assist': return 'Federal Assistant';
       case '/custom-gpt/federal-editorial': return 'Federal Editorial';
       case '/federal-bot': return 'The Federal Bot';
+      case '/admin-dashboard': return 'Admin Panel';
       default: return '';
     }
   };
@@ -53,7 +55,7 @@ const TopMenu = () => {
 
         if (response.status === 200) {
             const { lastLogout } = response.data;
-            // console.log(response.data)
+            console.log(response.data)
 
             // Store last logout time
             sessionStorage.setItem("lastLogout", lastLogout);
@@ -86,7 +88,7 @@ const TopMenu = () => {
       <Container fluid>
          <Row className="w-100 align-items-end">
          <Col xl={3} md={6} xs={9}>
-  <Breadcrumb className="topTitle">
+  <Breadcrumb>
     <Breadcrumb.Item className="breadCrumbMain">Dashboard</Breadcrumb.Item>
      <span className="mx-2">&gt;</span>
     <Breadcrumb.Item active className="custom-breadcrumb "> {getLabel()}</Breadcrumb.Item>
@@ -113,8 +115,12 @@ const TopMenu = () => {
               <Dropdown.Toggle variant="" id="dropdown-profile" className="d-flex align-items-center border-0">
                 <div className="d-flex align-items-center gap-3 me-2">
                   {/* <span className="avatar-text">{initial}</span> */}
-                  <Image src={`https://avatar.iran.liara.run/username?username=${userName}`} width="40" roundedCircle />
-                  <div className=" text-start fw-medium userAcc">
+<Image
+  src={`https://ui-avatars.com/api/?name=${userName}&background=0D8ABC&color=fff`}
+  width="40"
+  roundedCircle
+/>
+                  <div className=" text-start fw-medium">
                   <p className="mb-0 d-none d-md-block">{userEmail}</p>
                   <small className="mb-0 d-none d-md-block">{userName}</small>
                   </div>
