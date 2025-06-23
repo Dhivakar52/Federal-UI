@@ -5,13 +5,23 @@ import { NavLink, useLocation } from "react-router-dom";
 import logo from "../assets/images/logo_federal_white.png";
 import "../css/Mobile.css";
 import { MenuContext } from "./Context/MenuProvider";
-
+import { Shield } from "lucide-react";
+import { useSelector } from 'react-redux';
 function MobileSideNav() {
   const [show, setShow] = useState(false);
   const { menuItems: menuSideBar } = useContext(MenuContext);
   const [openSubMenu, setOpenSubMenu] = useState(null);
   const location = useLocation();
-
+  const userRole = useSelector((state) => state.auth.userRole);
+   const filteredMenuItems = userRole === 'admin'
+  ? [...menuSideBar, {
+      label: 'Admin Panel',
+      path: '/admin-dashboard',
+      icon: <Shield />,
+      activeIcon: <Shield color="black" />,
+      
+    }]
+  : menuSideBar;
   return (
     <>
       {/* Mobile Navbar */}
@@ -43,7 +53,7 @@ function MobileSideNav() {
         </Offcanvas.Header>
         <Offcanvas.Body>
           <Nav className="flex-column">
-            {menuSideBar.map((item, index) => {
+            {filteredMenuItems.map((item, index) => {
               const isActive = location.pathname === item.path;
               const hasSubmenu = item.submenu && item.submenu.length > 0;
               const isSubmenuOpen = openSubMenu === index;

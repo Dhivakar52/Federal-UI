@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Newspaper, Loader2, HelpCircle, Youtube, FileText, AlignLeft, RefreshCw, Copy, Check } from 'lucide-react';
-// import { generateNewsStory } from './ApiScript.js';
+import { generateNewsStory } from './ApiScript.js';
 import toast, { Toaster } from 'react-hot-toast';
 
 const LANGUAGES = ['English', 'Hindi', 'Tamil', 'Telugu', 'Malayalam', 'Kannada', 'Bengali', 'Marathi', 'Gujarati'];

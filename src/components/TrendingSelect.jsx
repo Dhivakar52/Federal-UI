@@ -103,6 +103,7 @@ function TrendingSelect({ selectedState,setSelectedState,region , setRegion }) {
     fetchTrending(newRegion); // Fetch data on dropdown change
      
   };
+ console.log(region);
   // const handleClear = () => {
   //   setSubmitted(false);
   //   setTrendingTopics([]);
