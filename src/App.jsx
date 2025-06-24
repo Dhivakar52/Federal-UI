@@ -23,6 +23,7 @@ import FederalAssist from './components/Custom_GPT/CustomGptSubMenu/FederalAssis
 import FederalEditorial from './components/Custom_GPT/CustomGptSubMenu/FederalEditorial'
 import { useSelector } from 'react-redux';
 import AdminPage from "./pages/AdminPage"
+import StoryPage from './pages/StoryPage';
 
 function App() {
 
@@ -46,6 +47,7 @@ function App() {
         <Route path="/option-junction" element={<OpinionPage />} />
         {/* <Route path="/custom-gpt" element={<CustomGptPage />} /> */}
         <Route path="/federal-bot" element={<FederalBotPage />} />
+        <Route path="/full-story" element={<StoryPage />} />
         <Route path="/account" element={<Account />} >
              <Route index element={<AccountForm/>} /> 
              <Route path='reset' element={<AccountReset/>} /> 

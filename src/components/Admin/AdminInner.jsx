@@ -25,6 +25,8 @@ export const AdminInner = () => {
   const [newEmail, setNewEmail] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [designation, setDesignation] = useState('');
+  const [editRole, setEditRole] = useState('');
+const [editPassword, setEditPassword] = useState('');
 
 const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -86,6 +88,8 @@ const apiUrl = import.meta.env.VITE_API_URL;
     setCurrentUser(item);
     setEditName(item.name);
     setEditEmail(item.email);
+    setEditRole(item.role);
+  setEditPassword(item.password || '');
     setShowModal(true);
   };
 
@@ -107,7 +111,7 @@ const apiUrl = import.meta.env.VITE_API_URL;
   };
 
   const handleSave = () => {
-    const updatedUser = { ...currentUser, name: editName, email: editEmail };
+    const updatedUser = { ...currentUser, name: editName, email: editEmail,  role: editRole.toLowerCase(), password: editPassword };
     updateUserMutation.mutate({ id: currentUser._id, updatedData: updatedUser });
   };
 
@@ -218,15 +222,19 @@ const filteredUsers = users
       </div>
 
       {/* Edit Modal */}
-      <EditUserModal
-        show={showModal}
-        onClose={() => setShowModal(false)}
-        onSave={handleSave}
-        name={editName}
-        email={editEmail}
-        setName={setEditName}
-        setEmail={setEditEmail}
-      />
+     <EditUserModal
+  show={showModal}
+  onClose={() => setShowModal(false)}
+  onSave={handleSave}
+  name={editName}
+  email={editEmail}
+  role={editRole}
+  password={editPassword}
+  setName={setEditName}
+  setEmail={setEditEmail}
+  setRole={setEditRole}
+  setPassword={setEditPassword}
+/>
 
       {/* Add Modal */}
       <AddUserModal

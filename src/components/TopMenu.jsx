@@ -35,6 +35,7 @@ console.log(userName, "Topmenu")
       case '/custom-gpt/federal-editorial': return 'Federal Editorial';
       case '/federal-bot': return 'The Federal Bot';
       case '/admin-dashboard': return 'Admin Panel';
+       case '/full-story': return 'Full Story';
       default: return '';
     }
   };
@@ -98,7 +99,7 @@ console.log(userName, "Topmenu")
              <Navbar.Toggle aria-controls="navbar-nav" />
         <Navbar.Collapse id="navbar-nav" className="justify-content-end">
           <Nav className="align-items-center">
-            <OverlayTrigger placement="bottom" overlay={<Tooltip id="tooltip-notifications">Notifications</Tooltip>}>
+            {/* <OverlayTrigger placement="bottom" overlay={<Tooltip id="tooltip-notifications">Notifications</Tooltip>}>
               <Nav.Link href="#notifications" className="d-flex align-items-center">
                 <Bell size={20} className="me-2 d-none d-lg-block" />
               </Nav.Link>
@@ -108,7 +109,7 @@ console.log(userName, "Topmenu")
               <Nav.Link href="#settings" className="d-flex align-items-center">
                 <Settings size={20} className="me-2 d-none d-lg-block" />
               </Nav.Link>
-            </OverlayTrigger>
+            </OverlayTrigger> */}
 
             {/* Profile Dropdown with Letter Avatar */}
             <Dropdown align="end">
