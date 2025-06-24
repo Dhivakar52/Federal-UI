@@ -22,7 +22,7 @@ const AddUserModal = ({
       <Modal.Body>
         <Form>
           <Form.Group className="mb-3">
-            <Form.Label>Name</Form.Label>
+            <Form.Label className="mb-2" >Name</Form.Label>
             <Form.Control
               type="text"
               value={name}
