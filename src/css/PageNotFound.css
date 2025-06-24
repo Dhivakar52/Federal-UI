@@ -1,0 +1,26 @@
+.error_img{
+    position: relative;
+}
+.error_img img{
+    height: 100vh;
+    width: 100%;
+    object-fit: cover;
+    
+}
+.error_msg {
+  position: absolute;
+  top: 40%;
+  left: 40%;
+}
+.error_msg h3{
+    font-size: 80px;
+    font-weight: 700;
+    text-align: center;
+    color: #d7b763;
+}
+.error_msg h3 span{
+    display: block;
+    font-size: 50px;
+    font-weight: 700;
+    color: #d7b763;
+}
