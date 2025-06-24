@@ -1,14 +1,19 @@
 import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
+import fs from 'fs'
 
 export default defineConfig({
   plugins: [react()],
   server: {
-    host: true, // or use '0.0.0.0' to expose to local network
+    host: true,
     port: 5173,
+    https: {
+      key: fs.readFileSync('./products.thefederal.com-key.pem'),
+      cert: fs.readFileSync('./products.thefederal.com.pem'),
+    },
     hmr: {
-      protocol: 'ws',
-      host: 'products.thefederal.com', // your custom domain
+      protocol: 'wss',
+      host: 'products.thefederal.com',
       port: 5173,
     },
   },
