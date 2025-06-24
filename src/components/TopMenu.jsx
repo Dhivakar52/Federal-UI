@@ -1,4 +1,5 @@
 import React,{useState,useEffect,useContext} from "react";
+import { useSelector } from 'react-redux';
 import { Navbar, Nav, Dropdown, Container, Tooltip, OverlayTrigger, Row, Col,Breadcrumb } from "react-bootstrap";
 import { Bell, Settings, User } from "lucide-react";
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -10,11 +11,11 @@ import axios from 'axios';
 const TopMenu = () => {
   const location = useLocation();
   const navigate = useNavigate();
-   const { userName, setUserName, userEmail } = useContext(MenuContext);
+  //  const { userName, userEmail } = useContext(MenuContext);
    const apiUrl = import.meta.env.VITE_API_URL;
- 
+   const { userName, userEmail } = useSelector((state) => state.auth);
 
-
+console.log(userName, "Topmenu")
 
   const getLabel = () => {
     switch (location.pathname) {
@@ -33,6 +34,8 @@ const TopMenu = () => {
       case '/custom-gpt/federal-assist': return 'Federal Assistant';
       case '/custom-gpt/federal-editorial': return 'Federal Editorial';
       case '/federal-bot': return 'The Federal Bot';
+      case '/admin-dashboard': return 'Admin Panel';
+       case '/full-story': return 'Full Story';
       default: return '';
     }
   };
@@ -96,7 +99,7 @@ const TopMenu = () => {
              <Navbar.Toggle aria-controls="navbar-nav" />
         <Navbar.Collapse id="navbar-nav" className="justify-content-end">
           <Nav className="align-items-center">
-            <OverlayTrigger placement="bottom" overlay={<Tooltip id="tooltip-notifications">Notifications</Tooltip>}>
+            {/* <OverlayTrigger placement="bottom" overlay={<Tooltip id="tooltip-notifications">Notifications</Tooltip>}>
               <Nav.Link href="#notifications" className="d-flex align-items-center">
                 <Bell size={20} className="me-2 d-none d-lg-block" />
               </Nav.Link>
@@ -106,17 +109,21 @@ const TopMenu = () => {
               <Nav.Link href="#settings" className="d-flex align-items-center">
                 <Settings size={20} className="me-2 d-none d-lg-block" />
               </Nav.Link>
-            </OverlayTrigger>
+            </OverlayTrigger> */}
 
             {/* Profile Dropdown with Letter Avatar */}
             <Dropdown align="end">
               <Dropdown.Toggle variant="" id="dropdown-profile" className="d-flex align-items-center border-0">
                 <div className="d-flex align-items-center gap-3 me-2">
                   {/* <span className="avatar-text">{initial}</span> */}
-                  <Image src={`https://avatar.iran.liara.run/username?username=${userEmail}`} width="40" roundedCircle />
-                  <div className="mt-3 text-start fw-medium">
+<Image
+  src={`https://ui-avatars.com/api/?name=${userName}&background=0D8ABC&color=fff`}
+  width="40"
+  roundedCircle
+/>
+                  <div className=" text-start fw-medium">
                   <p className="mb-0 d-none d-md-block">{userEmail}</p>
-                  <p className="mb-0 d-none d-md-block">{userName}</p>
+                  <small className="mb-0 d-none d-md-block">{userName}</small>
                   </div>
                  
                 </div>

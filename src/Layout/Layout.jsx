@@ -7,9 +7,7 @@ import '../css/Layout.css'
 
 
 
-const Layout = ({ children }) => {
- console.log(children)
-  
+const Layout = ({ children }) => { 
 
     return (
 

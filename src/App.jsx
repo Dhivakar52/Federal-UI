@@ -21,8 +21,15 @@ import CustomGptPage from './pages/CustomGptPage';
 import FederalBotPage from './pages/FederalBotPage';
 import FederalAssist from './components/Custom_GPT/CustomGptSubMenu/FederalAssist'
 import FederalEditorial from './components/Custom_GPT/CustomGptSubMenu/FederalEditorial'
+import { useSelector } from 'react-redux';
+import AdminPage from "./pages/AdminPage"
+import StoryPage from './pages/StoryPage';
 
 function App() {
+
+  const userRole = useSelector((state) => state.auth.userRole);
+  const isAdmin = userRole === 'admin';
+
   return (
     <MenuProvider>
      <Router>
@@ -40,6 +47,7 @@ function App() {
         <Route path="/option-junction" element={<OpinionPage />} />
         {/* <Route path="/custom-gpt" element={<CustomGptPage />} /> */}
         <Route path="/federal-bot" element={<FederalBotPage />} />
+        <Route path="/full-story" element={<StoryPage />} />
         <Route path="/account" element={<Account />} >
              <Route index element={<AccountForm/>} /> 
              <Route path='reset' element={<AccountReset/>} /> 
@@ -47,9 +55,16 @@ function App() {
         <Route path="/custom-gpt" element={<CustomGptPage />} >
              <Route  path="federal-assist"  element={<FederalAssist/>} /> 
              <Route path='federal-editorial' element={<FederalEditorial/>} /> 
-        </Route>
+          </Route>
+          
+           {/* conditionally render admin route */}
+           {isAdmin && (
+            <Route path="/admin-dashboard" element={<AdminPage />} />
+          )}
         <Route path="*" element={<PageNotFound/>} />
-      </Routes>
+        </Routes>
+        
+         
     </Router>
     </MenuProvider>
   )

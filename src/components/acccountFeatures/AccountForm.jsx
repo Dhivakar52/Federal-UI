@@ -8,14 +8,16 @@ import Image from 'react-bootstrap/Image';
 import { Camera } from "lucide-react";
 
 import { useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { MenuContext } from "../Context/MenuProvider";
 
 const AccountForm = () => {
   const navigate = useNavigate();
 
   // Get initial values from sessionStorage
-  const { userName, setUserName, userEmail } = useContext(MenuContext);
+  // const { userName, setUserName, userEmail } = useContext(MenuContext);
   const [image, setImage] = useState(null);
+     const { userName, userEmail } = useSelector((state) => state.auth);
 
   // Function to handle username change dynamically
   const handleUserNameChange = (e) => {
@@ -52,15 +54,21 @@ const AccountForm = () => {
             <div className='accounts'>
               <div className='text-center mb-3'>
                 <div className="profile-image-container">
-                  <Image
-                    src={image || `https://avatar.iran.liara.run/username?username=${userEmail}`}
+                  {/* <Image
+                    src={image || `https://avatar.iran.liara.run/username?username=${userName}`}
                     roundedCircle
                     loading='lazy'
                     className="profile-image"
+                  /> */}
+                  <Image
+                    src={`https://ui-avatars.com/api/?name=${userName}&background=0D8ABC&color=fff`}
+                    width="40"
+                    roundedCircle
+                     className="profile-image"
                   />
-                  <label htmlFor="fileInput" className="camera-icon-overlay">
+                  {/* <label htmlFor="fileInput" className="camera-icon-overlay">
                     <Camera size={30} color="white" />
-                  </label>
+                  </label> */}
                   <input
                     type="file"
                     id="fileInput"

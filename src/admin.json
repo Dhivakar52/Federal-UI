@@ -1,0 +1,10 @@
+[
+    {
+      "name": "Admin",
+      "email": "admin@gmail.com",
+      "loginId": "admin@gmail.com",
+      "passwordHash": "$2b$10$HHYjxe8sicje3jhuuMWMpeJsO.6AwwJsGy4pAnh785y2IxzzDhNt.",
+      "lastLogin": "2025-03-25T09:20:28.398+00:00",
+      "lastLogout": "2025-03-25T09:24:57.711+00:00",
+      "role":"admin"
+    } ]

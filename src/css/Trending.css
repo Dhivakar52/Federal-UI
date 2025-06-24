@@ -33,7 +33,7 @@
 }
 
 .submitBtn {
-    background: #520f0f !important;
+    background: var(--theme_brown_color) !important;
     color: #ffff !important;
 }
 
@@ -73,7 +73,7 @@
 
 .loading-bar {
     width: 100%;
-    background-color: orange;
+    background-color: var(--theme_yellow_color);
     border-radius: 5px;
     height: 10px;
     margin-top: 10px;

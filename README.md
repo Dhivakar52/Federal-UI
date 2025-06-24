@@ -15,11 +15,20 @@ Front end
 5. npm install react-toastify
 6. npm install openai
 7. npm install react-hot-toast
+8. npm install @reduxjs/toolkit
+9. npm install react-redux
+10.npm install react-data-table-component
+11. npm install date-fns
+12.npm install sweetalert2
+13. npm install @tanstack/react-query
+
 
 
 //Backend 
 1. npm init -y
 2. npm i express axios
+3. npm i cors
+4. npm i dot
 3. node server.js
 4. npm install -g nodemon
 5. npm install node-cache
