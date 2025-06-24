@@ -6,18 +6,18 @@ export default defineConfig({
   server: {
     host: true,
     port: 5173,
-    https: false,
+    https: true, // Enable HTTPS if your site is HTTPS
     hmr: {
-      protocol: 'ws',
-      host: 'localhost',
-      port: 5173,
+      protocol: 'wss', // secure websocket
+      host: 'products.thefederal.com',
+      port: 443, // HTTPS port
     },
     proxy: {
       '/api': {
-        target: 'https://products.thefederal.com', 
+        target: 'https://products.thefederal.com',
         changeOrigin: true,
         secure: false,
-        rewrite: (path) => path.replace(/^\/api/, ''), 
+        rewrite: (path) => path.replace(/^\/api/, ''),
       },
     },
   },
