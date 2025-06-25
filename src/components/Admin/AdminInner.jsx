@@ -197,7 +197,7 @@ const filteredUsers = users
                 Add User <span><Plus size={15} /></span>
               </button>
             </div>
-              <div className=" col-2 mb-3">
+              <div className=" col-7 mb-3 text-end">
               {/* <button
                 className="btn btn-primary"   
               >
