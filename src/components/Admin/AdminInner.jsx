@@ -189,7 +189,7 @@ const filteredUsers = users
                 onChange={(e) => setFilterText(e.target.value)}
               />
             </div>
-            <div className="col-md-1 col-2 mb-3">
+            <div className="col-md-2 col-2 mb-3">
               <button
                 className="btn btn-primary addBtn"
                 onClick={() => setShowAddModal(true)}
