@@ -43,7 +43,8 @@ const LoginTemplate = () => {
         }));
       
         
-        if (result.data.role?.toLowerCase() === 'admin') {
+        if (result.data.role?.toLowerCase() === 'admin'||
+           result.data.name?.toLowerCase() === 'Admin' ) {
           navigate('/admin-dashboard');
         } else {
           navigate('/summary');
