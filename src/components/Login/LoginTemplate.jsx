@@ -33,6 +33,7 @@ const LoginTemplate = () => {
     setSuccess(null);
 
     try {
+
       const response = await axios.post(`${apiUrl}`, { loginId, password });
 
       const { token } = response.data;
@@ -40,6 +41,33 @@ const LoginTemplate = () => {
       console.log("Decoded JWT:", decoded);
 
       const { name, email, role } = decoded;
+
+      const result = await axios.post(`${apiUrl}`, { loginId, password  });
+      // console.log(loginId, password, result.data.role, result.data.name, result.data);
+
+      if (result.data.message === "Login successful") {
+        setLastLogin(result.data.lastLogin);
+        setSuccess("Login successful!");
+        sessionStorage.removeItem("lastLogout");
+        sessionStorage.setItem("userEmail", loginId);
+        sessionStorage.setItem("userName", result.data.name);
+        dispatch(login({
+          userName: result.data.name,
+          userEmail: loginId,
+          userRole: result.data.role,
+        }));
+      
+        
+        if (result.data.role?.toLowerCase() === 'admin'||
+           result.data.name?.toLowerCase() === 'Admin' ) {
+          navigate('/admin-dashboard');
+        } else {
+          navigate('/summary');
+        }
+      } else {
+        setError('Invalid credentials');
+      }
+
 
       // ✅ Store token and user data in sessionStorage
       localStorage.setItem('token', token);
