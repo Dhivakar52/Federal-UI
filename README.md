@@ -32,6 +32,9 @@ Front end
 3. node server.js
 4. npm install -g nodemon
 5. npm install node-cache
+6.npm install puppeteer
+7.npm install @vitalets/google-translate-api
+8. npm install jsonwebtoken
 
 
 //Database

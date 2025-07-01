@@ -10,6 +10,7 @@ import {
   LayoutGrid,
   MessageSquare,
   User,
+  ScrollText 
 } from 'lucide-react';
 
 export const MenuContext = createContext();
@@ -91,12 +92,12 @@ export const MenuProvider = ({ children }) => {
     label: "Opinion Junction",
     path: "/option-junction"
   },
-     {
-    icon: <User color="white" size={20} />,
-    activeIcon: <User color="black" size={20} />,
-    label: "Full Story",
-    path: "/full-story"
-  },
+{
+  icon: <ScrollText color="white" size={20} />,
+  activeIcon: <ScrollText color="black" size={20} />,
+  label: "Full Story",
+  path: "/full-story"
+},
   {
     icon: <User color="white" size={20} />,
     activeIcon: <User color="black" size={20} />,

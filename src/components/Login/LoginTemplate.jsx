@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import {  Form, Button, Card, Alert } from 'react-bootstrap';
+import { Form, Button, Card, Alert } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { Eye, EyeOff } from 'lucide-react'; 
-import logoIcon from '../../assets/images/logo.png';
 import { useDispatch } from 'react-redux';
 import { login } from '../../redux/authSlice';
+import logoIcon from '../../assets/images/logo.png';
 
 import '../../css/Login.css';
 
@@ -15,121 +15,122 @@ const LoginTemplate = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
-  const [lastLogin, setLastLogin] = useState(null);
-  const apiUrl = import.meta.env.VITE_API_URL;
 
+  const apiUrl = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  function decodeJWT(token) {
+  const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+  return JSON.parse(atob(base64));
+}
+
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
-    
+
     try {
-      const result = await axios.post(`${apiUrl}`, { loginId, password  });
-      // console.log(loginId, password, result.data.role, result.data.name, result.data);
+      const response = await axios.post(`${apiUrl}`, { loginId, password });
 
-      if (result.data.message === "Login successful") {
-        setLastLogin(result.data.lastLogin);
-        setSuccess("Login successful!");
-        sessionStorage.removeItem("lastLogout");
-        sessionStorage.setItem("userEmail", loginId);
-        sessionStorage.setItem("userName", result.data.name);
-        dispatch(login({
-          userName: result.data.name,
-          userEmail: loginId,
-          userRole: result.data.role,
-        }));
-      
-        
-        if (result.data.role?.toLowerCase() === 'admin') {
-          navigate('/admin-dashboard');
-        } else {
-          navigate('/summary');
-        }
+      const { token } = response.data;
+      const decoded = decodeJWT(token); 
+      console.log("Decoded JWT:", decoded);
+
+      const { name, email, role } = decoded;
+
+      // ✅ Store token and user data in sessionStorage
+      localStorage.setItem('token', token);
+      localStorage.setItem('userEmail', email || loginId);
+      localStorage.setItem('userName', name);
+      localStorage.setItem('userRole', role);
+
+      // ✅ Update Redux
+      dispatch(login({
+        userName: name,
+        userEmail: email || loginId,
+        userRole: role,
+      }));
+
+      setSuccess("Login successful!");
+
+      // ✅ Navigate based on role
+      if (role?.toLowerCase() === 'admin') {
+        navigate('/admin-dashboard');
       } else {
-        setError('Invalid credentials');
+        navigate('/summary');
       }
-
-
     } catch (err) {
-      console.error('Error during login:', err.response ? err.response.data : err.message);
-      setError(err.response ? err.response.data.message : 'Error during login');
+      console.error("Login error:", err);
+      setError(err.response?.data?.message || 'Login failed');
     }
   };
 
   return (
     <div className="loginCenter">
-    <Card className="login_box">
-      <Card.Body>
-        <Card.Title className="text-center">
-          <div className="title_logo">
+      <Card className="login_box">
+        <Card.Body>
+          <Card.Title className="text-center">
+            <div className="title_logo">
             <span>
               <img src={logoIcon} alt="Logo" className="img-fluid" />
             </span>
           </div>
-        </Card.Title>
+          </Card.Title>
 
-        {/* Alerts */}
-        {error && <Alert variant="danger">{error}</Alert>}
-        {success && <Alert variant="success">{success}</Alert>}
+          {error && <Alert variant="danger">{error}</Alert>}
+          {success && <Alert variant="success">{success}</Alert>}
 
-        <Form onSubmit={handleSubmit}>
-          {/* Login ID */}
-          <Form.Group controlId="formLoginId">
-            <Form.Label>Email or Login ID</Form.Label>
-            <Form.Control
-              type="text"
-              placeholder="Enter your email or login ID"
-              onChange={(e) => setLoginId(e.target.value)}
-              value={loginId}
-              required
-            />
-          </Form.Group>
-
-          {/* Password */}
-          <Form.Group controlId="formPassword" className="mt-3">
-            <Form.Label>Password</Form.Label>
-            <div className="position-relative">
+          <Form onSubmit={handleSubmit}>
+            <Form.Group controlId="formLoginId">
+              <Form.Label>Email or Login ID</Form.Label>
               <Form.Control
-                type={showPassword ? "text" : "password"}
-                placeholder="Enter your password"
-                onChange={(e) => setPassword(e.target.value)}
-                value={password}
+                type="text"
+                placeholder="Enter your email or login ID"
+                value={loginId}
+                onChange={(e) => setLoginId(e.target.value)}
                 required
               />
-              <span
-                className="position-absolute top-50 end-0 translate-middle-y me-2"
-                style={{ cursor: "pointer" }}
-                onClick={(e) => {
-                  e.preventDefault();
-                  setShowPassword((prev) => !prev);
-                }}
-              >
-                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-              </span>
+            </Form.Group>
+
+            <Form.Group controlId="formPassword" className="mt-3">
+              <Form.Label>Password</Form.Label>
+              <div className="position-relative">
+                <Form.Control
+                  type={showPassword ? "text" : "password"}
+                  placeholder="Enter your password"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                />
+                <span
+                  className="position-absolute top-50 end-0 translate-middle-y me-2"
+                  style={{ cursor: "pointer" }}
+                  onClick={() => setShowPassword(prev => !prev)}
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </span>
+              </div>
+            </Form.Group>
+
+            <div className="d-flex justify-content-between align-items-center mt-3">
+              <Form.Check type="checkbox" id="rememberMe" label="Remember Me" />
+              <a href="#" className="text-primary" style={{ textDecoration: 'none' }}>
+                Forgot Password?
+              </a>
             </div>
-          </Form.Group>
 
-          {/* Remember Me & Forgot Password */}
-          <div className="d-flex justify-content-between align-items-center mt-3">
-            <Form.Check type="checkbox" id="rememberMe" label="Remember Me" />
-            <a href="#" className="text-primary" style={{ textDecoration: 'none' }}>
-              Forgot Password?
-            </a>
-          </div>
-
-          {/* Login Button */}
-          <div className="text-end mt-5">
-            <Button variant="primary" type="submit" className='btnColor'>
-              Login
-            </Button>
-          </div>
-        </Form>
-      </Card.Body>
-    </Card>
-  </div>
+            <div className="text-end mt-5">
+              <Button variant="primary" type="submit" className='btnColor'>
+                Login
+              </Button>
+            </div>
+          </Form>
+        </Card.Body>
+      </Card>
+    </div>
   );
 };
 
