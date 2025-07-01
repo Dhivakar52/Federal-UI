@@ -4,10 +4,6 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   plugins: [react()],
   server: {
-
-    proxy: {
-      '/fullstory': 'http://localhost:5000',
-
     host: true,
     port: 5173,
     https: false, // Keep false if you're using reverse proxy with HTTPS outside
@@ -23,7 +19,14 @@ export default defineConfig({
         secure: false,
         rewrite: (path) => path.replace(/^\/api/, ''),
       },
-
     },
   },
 });
+
+
+
+
+
+
+
+
