@@ -2,9 +2,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  userName: sessionStorage.getItem("userName") || "",
-  userEmail: sessionStorage.getItem("userEmail") || "",
-  userRole: sessionStorage.getItem("userRole") || "",
+  userName: localStorage.getItem("userName") || "",
+  userEmail: localStorage.getItem("userEmail") || "",
+  userRole: localStorage.getItem("userRole") || "",
+  //  token: localStorage.getItem("token") || "",
 };
 
 const authSlice = createSlice({
@@ -15,20 +16,24 @@ const authSlice = createSlice({
       state.userName = action.payload.userName;
       state.userEmail = action.payload.userEmail;
       state.userRole = action.payload.userRole;
+       state.token = action.payload.token;
 
       // Store in sessionStorage
-      sessionStorage.setItem("userName", action.payload.userName);
-      sessionStorage.setItem("userEmail", action.payload.userEmail);
-      sessionStorage.setItem("userRole", action.payload.userRole);
+      localStorage.setItem("userName", action.payload.userName);
+      localStorage.setItem("userEmail", action.payload.userEmail);
+      localStorage.setItem("userRole", action.payload.userRole);
+      //  localStorage.setItem("token", action.payload.token);
     },
     logout: (state) => {
       state.userName = "";
       state.userEmail = "";
       state.userRole = "";
 
-      sessionStorage.removeItem("userName");
-      sessionStorage.removeItem("userEmail");
-      sessionStorage.removeItem("userRole");
+      localStorage.removeItem("userName");
+      localStorage.removeItem("userEmail");
+      localStorage.removeItem("userRole");
+      localStorage.removeItem("token");
+
     },
   },
 });

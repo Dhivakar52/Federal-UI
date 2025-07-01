@@ -24,6 +24,9 @@ import FederalEditorial from './components/Custom_GPT/CustomGptSubMenu/FederalEd
 import { useSelector } from 'react-redux';
 import AdminPage from "./pages/AdminPage"
 import StoryPage from './pages/StoryPage';
+import PrivateRoute from './components/Authorization/PrivateRoute';
+import Unauthorized from './components/Authorization/Unauthorized';
+import SessionMonitor from './components/SessionModal/SessionMonitor';
 
 function App() {
 
@@ -33,10 +36,13 @@ function App() {
   return (
     <MenuProvider>
      <Router>
+      <SessionMonitor />
       <Routes>
         <Route path="/register" element={<Register/>} />
         <Route path="/" element={<LoginPage/>} />
-        <Route path="/trends" element={<Trends/>} />
+           <Route path="/Unauthorized" element={<Unauthorized />} />
+
+            <Route path="/trends" element={<Trends/>} />
         <Route path="/summary" element={<Summarize  />} />
         <Route path="/flashcard" element={<FlashCard  />} />
         <Route path="/peer" element={<PeerUpdate />} />
@@ -56,12 +62,19 @@ function App() {
              <Route  path="federal-assist"  element={<FederalAssist/>} /> 
              <Route path='federal-editorial' element={<FederalEditorial/>} /> 
           </Route>
+
+              <Route element={<PrivateRoute />}>
+        
+    {/* other common routes */}
+  
+          </Route>
+
           
            {/* conditionally render admin route */}
            {isAdmin && (
             <Route path="/admin-dashboard" element={<AdminPage />} />
           )}
-        <Route path="*" element={<PageNotFound/>} />
+          <Route path="*" element={<PageNotFound/>} />
         </Routes>
         
          

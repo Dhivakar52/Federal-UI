@@ -50,7 +50,7 @@ console.log(userName, "Topmenu")
 
   const handleLogout = async () => {
     try {
-        const loginId = sessionStorage.getItem("userEmail");
+        const loginId = localStorage.getItem("userEmail");
 
         const response = await axios.post(`${apiUrl}/logout`, { loginId });
 
@@ -59,14 +59,16 @@ console.log(userName, "Topmenu")
             console.log(response.data)
 
             // Store last logout time
-            sessionStorage.setItem("lastLogout", lastLogout);
+            localStorage.setItem("lastLogout", lastLogout);
+            
 
             console.log('Logout successful:', lastLogout);
 
             // Clear session storage
-            sessionStorage.removeItem("userEmail");
-            sessionStorage.removeItem("userName");
-
+            localStorage.removeItem("userEmail");
+            localStorage.removeItem("userName");
+            localStorage.removeItem("token");
+            localStorage.removeItem("userRole");
             navigate('/'); // Redirect to login
         }
     } catch (error) {
