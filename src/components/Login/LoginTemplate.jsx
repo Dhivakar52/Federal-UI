@@ -35,7 +35,7 @@ const LoginTemplate = () => {
     try {
       // const response = await axios.post(`${apiUrl}/login`, { loginId, password });
 
-       const result = await axios.post(`${apiUrl}`, { loginId, password  });
+       const result = await axios.post(`${apiUrl}/login`, { loginId, password  });
 
 
       const { token } = response.data;
