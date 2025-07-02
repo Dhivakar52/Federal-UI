@@ -38,7 +38,7 @@ const LoginTemplate = () => {
        const result = await axios.post(`${apiUrl}/login`, { loginId, password  });
 
 
-      const { token } = response.data;
+      const { token } = result.data;
       const decoded = decodeJWT(token); 
       console.log("Decoded JWT:", decoded);
 
