@@ -15,7 +15,7 @@ function Opinon() {
       "Greaterkashmir", "Kashmirlife", "O TV (Odisha Television)"
     ],
     "Marathi": ["Divyamarathi Bhaskar"],
-    "Hindi": ["The Federal Desh", "Live Hindustan", "Dainik Bhaskar"],
+    "Hindi": ["The Federal Desh", "Dainik Bhaskar"],
     "Telugu": ["The Federal Andhra", "The Federal Telangana"],
     "Kannada": ["The Federal Karnataka"]
   };
