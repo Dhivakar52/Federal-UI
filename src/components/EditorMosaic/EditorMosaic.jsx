@@ -9,18 +9,13 @@ function EditorMosaic() {
   const [loading, setLoading] = useState(false);
  
   // 🗂️ State-wise grouped news sources
-  const newsSourcesByState = {
-    "Andhra Pradesh": ["Deccan Chronicle", "The Federal Andhra"],
-    "Gujarat": ["Gujarati- Gujarat Samachar"],
-    "Karnataka": ["The Federal Karnataka"],
-    "Kerala": ["Manorama - English"],
-    "Maharashtra": ["Live Mint", "Money Control"],
-    "Tamil Nadu": ["The Hindu", "Business Line"],
-    "Telangana": ["Telangana Today", "The Federal Telangana"],
-    "National": [
-      "BBC India", "Hindustan Times", "India Today", "Indian Express",
-      "NDTV", "News 18", "The Federal", "Times of India"
-    ]
+const newsSourcesByState = {
+    "English": ["The Hindu", "Hindustan Times", "Economic Times", "Indian Express",
+      "Business Standard", "Business Line", "Hans India",
+      "Kashmirlife"
+    ],
+    "Hindi": ["Live Hindustan"],
+    "Malayalam": ["Mathrubhumi"]
   };
  
   const fetchNews = async (source) => {
@@ -45,8 +40,8 @@ function EditorMosaic() {
  
   return (
     <Container fluid>
-      <h1 className="my-4">Latest LIVE News from Peer Sites Opinion Junction</h1>
-      <p>Select a state first, then choose a news source to view headlines.</p>
+      <h1 className="my-4">Latest LIVE News from Peer Sites Editorial Mosaic</h1>
+      <p>Select a Language first, then choose a news source to view headlines.</p>
  
       <Row className="mb-4">
         {/* State Dropdown */}
@@ -59,9 +54,9 @@ function EditorMosaic() {
               setHeadlines([]);
             }}
             value={selectedState}
-            aria-label="Select State"
+            aria-label="Select Language"
           >
-            <option value="">Select State</option>
+            <option value="">Select Language</option>
             {Object.keys(newsSourcesByState).map((state) => (
               <option key={state} value={state}>
                 {state}
