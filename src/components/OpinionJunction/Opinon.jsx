@@ -43,7 +43,7 @@ function Opinon() {
   return (
     <Container fluid>
       <h1 className="my-4">Latest LIVE News from Peer Sites Opinion Junction</h1>
-      <p>Select a state first, then choose a news source to view headlines.</p>
+      <p>Select a Language first, then choose a news source to view headlines.</p>
  
       <Row className="mb-4">
         {/* State Dropdown */}
@@ -56,9 +56,9 @@ function Opinon() {
               setHeadlines([]);
             }}
             value={selectedState}
-            aria-label="Select State"
+            aria-label="Select Language"
           >
-            <option value="">Select State</option>
+            <option value="">Select Language</option>
             {Object.keys(newsSourcesByState).map((state) => (
               <option key={state} value={state}>
                 {state}
