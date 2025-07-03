@@ -10,17 +10,14 @@ function Opinon() {
  
   // 🗂️ State-wise grouped news sources
   const newsSourcesByState = {
-    "Andhra Pradesh": ["Deccan Chronicle", "The Federal Andhra"],
-    "Gujarat": ["Gujarati- Gujarat Samachar"],
-    "Karnataka": ["The Federal Karnataka"],
-    "Kerala": ["Manorama - English"],
-    "Maharashtra": ["Live Mint", "Money Control"],
-    "Tamil Nadu": ["The Hindu", "Business Line"],
-    "Telangana": ["Telangana Today", "The Federal Telangana"],
-    "National": [
-      "BBC India", "Hindustan Times", "India Today", "Indian Express",
-      "NDTV", "News 18", "The Federal", "Times of India"
-    ]
+    "English": ["The Federal", "The Hindu", "Hindustan Times", "Live Mint", "The Print", "Economic Times", "The Quint", "Indian Express",
+      "Financial Times", "News 18", "Business Standard", "Business Line", "Mid Day", "Hans India",
+      "Greaterkashmir", "Kashmirlife", "O TV (Odisha Television)"
+    ],
+    "Marathi": ["Divyamarathi Bhaskar"],
+    "Hindi": ["The Federal Desh", "Live Hindustan", "Dainik Bhaskar"],
+    "Telugu": ["The Federal Andhra", "The Federal Telangana"],
+    "Kannada": ["The Federal Karnataka"]
   };
  
   const fetchNews = async (source) => {
