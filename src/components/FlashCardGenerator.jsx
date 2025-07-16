@@ -14,7 +14,7 @@ const FlashCardGenerator = () => {
   const [loading, setLoading] = useState(false);
   const [loadingTimer, setLoadingTimer]= useState(0);
 
-
+ const apiUrl = import.meta.env.VITE_API_URL;
 
 
 
@@ -35,7 +35,7 @@ const FlashCardGenerator = () => {
     try {
       const startTime = performance.now(); // Record start time
     //  console.log(process.env.REACT_APP_FRONT_PORT_URL);
-    const apiUrl = import.meta.env.VITE_API_URL;
+   
       const response  = await fetch(`${apiUrl}/flash`, {
         method: 'POST',
         headers: {
