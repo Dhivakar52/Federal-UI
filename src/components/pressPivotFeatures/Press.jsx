@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Newspaper, RotateCcw, Upload, Clipboard, Loader2, Globe2, AlertCircle, RefreshCw } from 'lucide-react';
+import { Newspaper, RotateCcw, Upload, Clipboard, Loader2, Globe2, AlertCircle, RefreshCw ,Download} from 'lucide-react';
 import Spinner from 'react-bootstrap/Spinner';
 import toast, { Toaster } from 'react-hot-toast';
 import { LanguageSelector } from './LanguageSelector';
@@ -79,6 +79,24 @@ function App() {
 
 
   };
+
+
+const handleDownload = () => {
+  const blob = new Blob([state.output], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'Generated_Article.txt';
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+};
+
+
+
+
+
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(state.output);
@@ -213,6 +231,17 @@ function App() {
                     </div>
                   )}
                 </div>
+                <div className="d-flex justify-content-end mt-3">
+                   <button
+                            onClick={handleDownload}
+                            disabled={!state.output}
+                            className="btn btn-outline-primary btn-sm text-end"
+                          >
+                            <Download className="w-4 h-4 me-2" />
+                            Download
+                    </button>
+                </div>
+                  
                 <div className="d-flex justify-content-between mt-3">
                   <button
                     onClick={handleGenerate}

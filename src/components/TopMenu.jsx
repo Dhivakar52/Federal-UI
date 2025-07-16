@@ -36,6 +36,7 @@ console.log(userName, "Topmenu")
       case '/federal-bot': return 'The Federal Bot';
       case '/admin-dashboard': return 'Admin Panel';
        case '/full-story': return 'Full Story';
+        case '/analyst': return 'News Analyst';
       default: return '';
     }
   };

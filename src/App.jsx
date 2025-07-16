@@ -26,7 +26,8 @@ import AdminPage from "./pages/AdminPage"
 import StoryPage from './pages/StoryPage';
 import PrivateRoute from './components/Authorization/PrivateRoute';
 import Unauthorized from './components/Authorization/Unauthorized';
-import SessionMonitor from './components/SessionModal/SessionMonitor';
+// import SessionMonitor from './components/SessionModal/SessionMonitor';
+import AnalystPage from './pages/AnalystPage';
 
 function App() {
 
@@ -36,12 +37,17 @@ function App() {
   return (
     <MenuProvider>
      <Router>
-      <SessionMonitor />
+      {/* <SessionMonitor /> */}
       <Routes>
         <Route path="/register" element={<Register/>} />
         <Route path="/" element={<LoginPage/>} />
            <Route path="/Unauthorized" element={<Unauthorized />} />
 
+
+         
+
+              <Route element={<PrivateRoute />}>
+        
             <Route path="/trends" element={<Trends/>} />
         <Route path="/summary" element={<Summarize  />} />
         <Route path="/flashcard" element={<FlashCard  />} />
@@ -54,6 +60,7 @@ function App() {
         {/* <Route path="/custom-gpt" element={<CustomGptPage />} /> */}
         <Route path="/federal-bot" element={<FederalBotPage />} />
         <Route path="/full-story" element={<StoryPage />} />
+         <Route path="/analyst" element={<AnalystPage />} />
         <Route path="/account" element={<Account />} >
              <Route index element={<AccountForm/>} /> 
              <Route path='reset' element={<AccountReset/>} /> 
@@ -62,10 +69,7 @@ function App() {
              <Route  path="federal-assist"  element={<FederalAssist/>} /> 
              <Route path='federal-editorial' element={<FederalEditorial/>} /> 
           </Route>
-
-              <Route element={<PrivateRoute />}>
-        
-    {/* other common routes */}
+                {/* other common routes */}
   
           </Route>
 

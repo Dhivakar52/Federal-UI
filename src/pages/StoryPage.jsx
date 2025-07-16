@@ -1,13 +1,13 @@
 import React from 'react'
 import Layout from '../Layout/Layout'
 
-import Story from '../components/FullStory/Story'
+import TranslateStory from '../components/Translate/TranslateStory'
 
 const StoryPage = () => {
   return (
     <>
     <Layout>
-  <Story/>
+  <TranslateStory/>
   </Layout>
   </>
   )

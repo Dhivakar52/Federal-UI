@@ -33,12 +33,9 @@ const LoginTemplate = () => {
     setSuccess(null);
 
     try {
-      // const response = await axios.post(`${apiUrl}/login`, { loginId, password });
+      const response = await axios.post(`${apiUrl}`, { loginId, password });
 
-       const result = await axios.post(`${apiUrl}/login`, { loginId, password  });
-
-
-      const { token } = result.data;
+      const { token } = response.data;
       const decoded = decodeJWT(token); 
       console.log("Decoded JWT:", decoded);
 
@@ -60,10 +57,9 @@ const LoginTemplate = () => {
       setSuccess("Login successful!");
 
       // ✅ Navigate based on role
-     if (result.data.role?.toLowerCase() === 'admin'||
-           result.data.name?.toLowerCase() === 'Admin' ) {
-          navigate('/admin-dashboard');
-        } else {
+      if (role?.toLowerCase() === 'admin') {
+        navigate('/admin-dashboard');
+      } else {
         navigate('/summary');
       }
     } catch (err) {

@@ -5,12 +5,15 @@ import {
   Newspaper,
   BookOpen,
   Users,
+  IdCard,
   Columns,
   Youtube,
   LayoutGrid,
   MessageSquare,
   User,
-  ScrollText 
+  ScrollText ,
+  Box   as  SearchCheck,
+  ChartNetwork 
 } from 'lucide-react';
 
 export const MenuContext = createContext();
@@ -92,14 +95,19 @@ export const MenuProvider = ({ children }) => {
     label: "Opinion Junction",
     path: "/option-junction"
   },
-
-// {
-//   icon: <ScrollText color="white" size={20} />,
-//   activeIcon: <ScrollText color="black" size={20} />,
-//   label: "Full Story",
-//   path: "/full-story"
-// },
-
+{
+  icon: <ScrollText color="white" size={20} />,
+  activeIcon: <ScrollText color="black" size={20} />,
+  label: "Full Story",
+  path: "/full-story"
+},
+{
+  icon: <ChartNetwork color="white" size={20} />,
+  activeIcon: <ChartNetwork color="black" size={20} />,
+  label: "News Analyst",
+  path: "/analyst"
+},
+{ icon: <SearchCheck size={20} />, activeIcon: <SearchCheck color="black" size={20} />, label: "SEO Guru", path: "/seo-guru" },
   {
     icon: <User color="white" size={20} />,
     activeIcon: <User color="black" size={20} />,
