@@ -5,6 +5,9 @@ import toast, { Toaster } from 'react-hot-toast';
 import { LanguageSelector } from './LanguageSelector';
 import { Disclosure } from './Disclosure';
 import { UsageInstructions } from './UsageInstructions';
+import * as pdfjsLib from 'pdfjs-dist';
+import { getDocument } from 'pdfjs-dist';
+import mammoth from 'mammoth';
 import '../../css/Press.css'
 
 const apiUrl = import.meta.env.VITE_API_URL;
@@ -19,17 +22,63 @@ function App() {
   });
 
 
- 
-  const handleFileUpload = (event) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setState(prev => ({ ...prev, input: e.target?.result }));
-      };
-      reader.readAsText(file);
+
+  const extractPdfText = async (file) => {
+  const reader = new FileReader();
+
+  reader.onload = async (e) => {
+    const typedarray = new Uint8Array(e.target.result);
+
+    const pdf = await getDocument(typedarray).promise;
+    let fullText = '';
+
+    for (let i = 1; i <= pdf.numPages; i++) {
+      const page = await pdf.getPage(i);
+      const content = await page.getTextContent();
+      const strings = content.items.map(item => item.str).join(' ');
+      fullText += strings + '\n';
     }
+
+    setState(prev => ({ ...prev, input: fullText }));
   };
+
+  reader.readAsArrayBuffer(file); // for binary PDF
+};
+
+
+const extractDocxText = (file) => {
+  const reader = new FileReader();
+
+  reader.onload = async (e) => {
+    const arrayBuffer = e.target.result;
+
+    const result = await mammoth.extractRawText({ arrayBuffer });
+    const text = result.value;
+
+    setState(prev => ({ ...prev, input: text }));
+  };
+
+  reader.readAsArrayBuffer(file); // for .docx
+};
+
+ 
+const handleFileUpload = (event) => {
+  const file = event.target.files?.[0];
+  if (!file) return;
+
+  const type = file.type;
+
+  if (type === 'text/plain') {
+    reader.readAsText(file); // .txt
+  } else if (type === 'application/pdf') {
+    extractPdfText(file); // use pdfjs-dist
+  } else if (type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
+    extractDocxText(file); // use mammoth
+  } else {
+    alert('Unsupported file type');
+  }
+};
+
 
   const handleClearContent = () => {
     setState(prev => ({
@@ -172,10 +221,10 @@ const handleDownload = () => {
                     </button>
                     <label className="btn btn-outline-primary btn-sm">
                       <Upload className="w-4 h-4 mr-2" />
-                      Upload .txt
+                      Upload 
                       <input
                         type="file"
-                        accept=".txt"
+                        accept=".txt,.pdf,.doc,.docx"
                         className="d-none "
                         onChange={handleFileUpload}
                       />

@@ -26,7 +26,8 @@ console.log(userName, "Topmenu")
       case '/account': return 'Profile Account';
       case '/account/reset': return 'Reset Password';
       case '/press-pivot': return 'Press-Pivot';
-      case '/youtube-script': return 'Tube Scribe';
+      // case '/youtube-script': return 'Tube Scribe';
+      case '/tube-script': return 'Tube Scribe';
       case '/seo-guru': return 'SEO Guru';
       case '/editor-mosaic': return 'Editorial Mosaic';
       case '/option-junction': return 'Opinion Junction';

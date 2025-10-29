@@ -28,6 +28,7 @@ import PrivateRoute from './components/Authorization/PrivateRoute';
 import Unauthorized from './components/Authorization/Unauthorized';
 // import SessionMonitor from './components/SessionModal/SessionMonitor';
 import AnalystPage from './pages/AnalystPage';
+import TubeScriptPage from './pages/TubeScriptPage';
 
 function App() {
 
@@ -54,6 +55,7 @@ function App() {
         <Route path="/peer" element={<PeerUpdate />} />
         <Route path="/press-pivot" element={<PressPivot />} />
         <Route path="/youtube-script" element={<YouTubePage />} />
+         <Route path="/tube-script" element={<TubeScriptPage />} />
         <Route path="/seo-guru" element={<SeoGuruPage />} />
         <Route path="/editor-mosaic" element={<EditorMosaicPage />} />
         <Route path="/option-junction" element={<OpinionPage />} />

@@ -38,6 +38,7 @@ const PrivateRoute = ({ allowedRoles }) => {
       setShowModal(true);
     }
   }, [token, userRole]);
+ 
 
   const handleRedirect = () => {
     setShowModal(false);

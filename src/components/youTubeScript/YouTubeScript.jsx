@@ -30,7 +30,7 @@ function YouTubeScript() {
 
   const [downloadUrl, setDownloadUrl] = useState(null);
   const [fileSize, setFileSize] = useState(0);
-  const apiUrl = import.meta.env.VITE_API_URL;
+ 
 
   useEffect(() => {
     return () => {
