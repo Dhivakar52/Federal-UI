@@ -5,16 +5,16 @@ export default defineConfig({
   plugins: [react()],
   server: {
     host: true,
-    port: 5173,
+    port: 5175,
     https: false, // Keep false if you're using reverse proxy with HTTPS outside
     hmr: {
       protocol: 'wss',
-      host: 'products.thefederal.com',
+      host: 'gproducts.thefederal.com',
       port: 443,
     },
     proxy: {
       '/api': {
-        target: 'https://products.thefederal.com',
+        target: 'https://gproducts.thefederal.com',
         changeOrigin: true,
         secure: false,
         rewrite: (path) => path.replace(/^\/api/, ''),
