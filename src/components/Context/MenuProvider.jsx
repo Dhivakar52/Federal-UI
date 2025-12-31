@@ -87,7 +87,7 @@ export const MenuProvider = ({ children }) => {
     icon: <Youtube color="white" size={20} />,
     activeIcon: <Youtube color="black" size={20} />,
     label: "Tube Scribe",
-    path: "/tube-script"
+    path: "/youtube-script"
   },
   {
     icon: <LayoutGrid color="white" size={20} />,

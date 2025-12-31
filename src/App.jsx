@@ -28,7 +28,7 @@ import PrivateRoute from './components/Authorization/PrivateRoute';
 import Unauthorized from './components/Authorization/Unauthorized';
 // import SessionMonitor from './components/SessionModal/SessionMonitor';
 import AnalystPage from './pages/AnalystPage';
-// import TubeScriptPage from './pages/TubeScriptPage';
+import TubeScriptPage from './pages/TubeScriptPage';
 
 function App() {
 
