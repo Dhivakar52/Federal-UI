@@ -11,3 +11,21 @@
 }
 
 
+
+.lightCard p {
+  margin-bottom: 6px;
+  white-space: pre-wrap;
+}
+
+.lightCard strong {
+  color: #0d6efd;
+}
+
+.lightCard em {
+  color: #6c757d;
+}
+
+.lightCard ul, .lightCard ol {
+  padding-left: 20px;
+  margin-bottom: 8px;
+}
