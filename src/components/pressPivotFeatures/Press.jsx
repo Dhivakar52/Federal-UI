@@ -5,7 +5,7 @@ import toast, { Toaster } from 'react-hot-toast';
 import { LanguageSelector } from './LanguageSelector';
 import { Disclosure } from './Disclosure';
 import { UsageInstructions } from './UsageInstructions';
-import * as pdfjsLib from 'pdfjs-dist';
+// import * as pdfjsLib from 'pdfjs-dist';
 import { getDocument } from 'pdfjs-dist';
 import mammoth from 'mammoth';
 import '../../css/Press.css'
