@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import { Button, Nav, Offcanvas } from "react-bootstrap";
 import { NavLink, useLocation } from "react-router-dom"; 
-import { Menu, X,ChevronDown, ChevronRight } from "lucide-react";
+import { Menu, X,ChevronDown, ChevronRight , Youtube } from "lucide-react";
 import logo from '../assets/images/logo_federal_white.png';
 import '../css/SideNavBar.css';
 import { MenuContext } from "./Context/MenuProvider";
@@ -15,13 +15,22 @@ const SideNavBar = () => {
   const [openSubMenu, setOpenSubMenu] = useState(null);
   const userRole = useSelector((state) => state.auth.userRole);
   const filteredMenuItems = userRole === 'admin'
-  ? [...menuSideBar, {
+  ? [...menuSideBar,
+    ,
+       {
+    icon: <Youtube color="white" size={20} />,
+    activeIcon: <Youtube color="black" size={20} />,
+    label: "Tube Scribe",
+    path: "/tube-script"
+  },
+   {
       label: 'Admin Panel',
       path: '/admin-dashboard',
       icon: <Shield />,
       activeIcon: <Shield color="black" />,
       
-    }]
+    }
+  ]
   : menuSideBar;
 
 
