@@ -30,7 +30,8 @@ function YouTubeScript() {
 
   const [downloadUrl, setDownloadUrl] = useState(null);
   const [fileSize, setFileSize] = useState(0);
- 
+  
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     return () => {
@@ -42,7 +43,7 @@ function YouTubeScript() {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch(`${apiUrl}/api/generate-news`, {
+      const response = await fetch(`${apiUrl}/api`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ ...videoContent, language })
