@@ -5,12 +5,19 @@ import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import '../../css/Analyst.css';
 
+
+const languages = [
+  'Tamil','English','Hindi','Telugu','Kannada',
+  'Malayalam','Bengali','Marathi','Gujarati'
+];
+
 function Analyst() {
   const [url, setUrl] = useState('');
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [showTooltip, setShowTooltip] = useState(false);
+  const [language, setLanguage] = useState("English");
 
   const inputRef = useRef(null);
   const apiUrl = import.meta.env.VITE_API_URL;
@@ -30,7 +37,16 @@ function Analyst() {
     setMessages((prev) => [...prev, { type: 'user', text: url }]);
 
     try {
-      const response = await axios.post(`${apiUrl}/analyst`, { url });
+
+ const payload = {
+  url,
+  language, 
+};
+
+      const response = await axios.post(`${apiUrl}/analyst`, payload);
+
+      console.log("PAYLOAD:", payload);
+
 
       if (response.data.error) {
         setError(response.data.error);
@@ -74,7 +90,7 @@ const formatSize = (text) => {
 
       <Form onSubmit={handleSubmit}>
         <Row className='mb-3'>
-          <Col sm={10} style={{ position: 'relative' }}>
+          <Col sm={8} style={{ position: 'relative' }}>
             <Form.Control
               ref={inputRef}
               type="text"
@@ -92,6 +108,19 @@ const formatSize = (text) => {
               )}
             </Overlay>
           </Col>
+          <Col sm={2}>
+    <Form.Select
+      value={language}
+      onChange={(e) => setLanguage(e.target.value)}
+      disabled={loading}
+    >
+      {languages.map((lang, idx) => (
+        <option key={idx} value={lang}>
+          {lang}
+        </option>
+      ))}
+    </Form.Select>
+  </Col>
           <Col sm={2}>
             <Button
               className='btnColor'

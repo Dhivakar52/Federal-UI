@@ -7,12 +7,19 @@ import { File } from "lucide-react";
 import '../css/FlashCard.css';
 import { TrendingBtn } from './TrendingBtn';
 
+const languages = [
+    'Tamil','English','Hindi','Telugu','Kannada',
+    'Malayalam','Bengali','Marathi','Gujarati'
+  ];
+
+
 const FlashCardGenerator = () => {
   const [url, setUrl] = useState('');
   const [flashcards, setFlashcards] = useState('');
   const [cardTitle, setCardTitle] = useState('');
   const [loading, setLoading] = useState(false);
   const [loadingTimer, setLoadingTimer]= useState(0);
+  const [language, setLanguage] = useState("English");
 
  const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -41,7 +48,10 @@ const FlashCardGenerator = () => {
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ url }),
+       body: JSON.stringify({ 
+  url,
+  language 
+}),
       });
   
       const data = await response.json();
@@ -121,9 +131,28 @@ const FlashCardGenerator = () => {
                       placeholder="Enter news article URL here..."
                     />
                   </div>
+
+                   <div>
+                      <Form.Group className="mb-3">
+  <Form.Label>Select Language</Form.Label>
+  <Form.Select
+    value={language}
+    onChange={(e) => setLanguage(e.target.value)}
+    disabled={loading}
+  >
+    {languages.map((lang, idx) => (
+      <option key={idx} value={lang}>
+        {lang}
+      </option>
+    ))}
+  </Form.Select>
+</Form.Group>
+                     </div>
                 </div>
+                    
+
                 <div>
-                  <TrendingBtn  submitBtnName="Submit" clearBtnName="Clear" />
+                  <TrendingBtn  submitBtnName="Submit" clearBtnName="Clear"/>
                 </div>
               </Col>
 

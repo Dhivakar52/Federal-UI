@@ -52,9 +52,19 @@ const apiUrl = import.meta.env.VITE_API_URL;
       setDesignation('');
       Swal.fire('Success', 'User added successfully!', 'success');
     },
-    onError: () => {
-      Swal.fire('Error', 'Failed to add user', 'error');
-    },
+    // onError: () => {
+    //   Swal.fire('Error', 'Failed to add user', 'error');
+    // },
+onError: (error) => {
+  const message =
+    error.response?.data?.message || "Failed to add user";
+
+  if (message.toLowerCase().includes("already exists")) {
+    Swal.fire('Warning', message, 'warning');
+  } else {
+    Swal.fire('Error', message, 'error');
+  }
+}
   });
 
   // ✅ Update user mutation
