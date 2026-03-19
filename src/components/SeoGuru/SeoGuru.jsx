@@ -18,16 +18,27 @@ const seoPrompts = [
   "Provide tips to improve readability for this piece.",
   "Suggest SEO friendly headlines for the story",
 ];
-
+const languages = [
+  'Tamil',
+  'English',
+  'Hindi',
+  'Telugu',
+  'Kannada',
+  'Malayalam',
+  'Bengali',
+  'Marathi',
+  'Gujarati'
+];
 function SeoGuru() {
   const [messages, setMessages] = useState([]);
   const [selectedPrompt, setSelectedPrompt] = useState("");
   const [urlInput, setUrlInput] = useState("");
   const [loading, setLoading] = useState(false);
+  const [language, setLanguage] = useState("English");
 
   const apiUrl = import.meta.env.VITE_API_URL; 
 
-  const handlePromptClick = async (prompt) => {
+  const handlePromptClick = async (prompt , language) => {
     setSelectedPrompt(prompt);
     setMessages((prev) => [...prev, { role: "user", text: prompt }]);
 
@@ -41,12 +52,17 @@ function SeoGuru() {
       ...prev,
       { role: "assistant", text: "⏳ Analyzing..." },
     ]);
+    
+
+
 
     try {
       const res = await axios.post(`${apiUrl}/seo`, {
         url: urlInput,
         promptType: prompt,
+         language: language,
       });
+
 
       setMessages((prev) => [
         ...prev.slice(0, -1),
@@ -85,11 +101,13 @@ const formatSize = (text) => {
     <Container fluid className="py-4">
       <h3 className=" mb-4">SEO Assistant Chatbot</h3>
 
+      
+
       {/* Chat Messages */}
 <Card className="mb-3" style={{ height: "300px", overflowY: "auto" }}>
   <Card.Body>
     {messages.length === 0 && (
-      <div className="text-muted"> SEO Chatbot</div>
+      <div className="text-muted"> SEO Chatbot   </div>
     )}
 
     {messages.map((msg, idx) => (
@@ -142,7 +160,7 @@ const formatSize = (text) => {
             <Button
               className="w-100 submitBtn"
               variant="secondary"
-              onClick={() => handlePromptClick(prompt)}
+              onClick={() => handlePromptClick(prompt , language)}
               disabled={loading || !urlInput}
             >
               {prompt}
@@ -152,7 +170,9 @@ const formatSize = (text) => {
       </Row>
 
       {/* URL Input */}
-      <Form>
+       <Row className="mb-3">
+ <Col  xs={12} md={6} lg={9} className="mb-2">
+       <Form>
         <Form.Group className="mb-3">
           <Form.Control
             type="url"
@@ -164,6 +184,30 @@ const formatSize = (text) => {
           />
         </Form.Group>
       </Form>
+ </Col>
+
+ <Col  xs={12} md={6} lg={3} className="mb-2">
+  
+      <Form.Group className="mb-3">
+  <Form.Select
+    value={language}
+    onChange={(e) => setLanguage(e.target.value)}
+    disabled={loading}
+  >
+    {languages.map((lang, idx) => (
+      <option key={idx} value={lang}>
+        {lang}
+      </option>
+    ))}
+  </Form.Select>
+</Form.Group>
+
+ </Col>
+
+       </Row>
+
+
+     
     </Container>
   );
 }

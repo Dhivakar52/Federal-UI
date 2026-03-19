@@ -5,12 +5,20 @@ import toast, { Toaster } from 'react-hot-toast';
 import { LanguageSelector } from './LanguageSelector';
 import { Disclosure } from './Disclosure';
 import { UsageInstructions } from './UsageInstructions';
-import * as pdfjsLib from 'pdfjs-dist';
-import { getDocument } from 'pdfjs-dist';
+
 import mammoth from 'mammoth';
 import '../../css/Press.css'
+import * as pdfjsLib from "pdfjs-dist/build/pdf";
+import pdfWorker from "pdfjs-dist/build/pdf.worker.min?url";
+
+pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
+
+
 
 const apiUrl = import.meta.env.VITE_API_URL;
+
+
+
 
 function App() {
   const [state, setState] = useState({
@@ -23,63 +31,84 @@ function App() {
 
 
 
-  const extractPdfText = async (file) => {
-  const reader = new FileReader();
 
-  reader.onload = async (e) => {
-    const typedarray = new Uint8Array(e.target.result);
 
-    const pdf = await getDocument(typedarray).promise;
-    let fullText = '';
+const MAX_CHARS = 20000; // safe limit (~20k chars)
 
-    for (let i = 1; i <= pdf.numPages; i++) {
+const extractPdfText = async (file) => {
+  try {
+    const arrayBuffer = await file.arrayBuffer();
+    const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+
+    let fullText = "";
+
+    // 👉 only first 3–5 pages (VERY IMPORTANT)
+    for (let i = 1; i <= Math.min(pdf.numPages, 5); i++) {
       const page = await pdf.getPage(i);
       const content = await page.getTextContent();
-      const strings = content.items.map(item => item.str).join(' ');
-      fullText += strings + '\n';
+
+      const text = content.items.map(item => item.str).join(" ");
+      fullText += text + "\n";
+
+      // 👉 stop if too long
+      if (fullText.length > MAX_CHARS) break;
     }
 
+    // 👉 final trim
+    fullText = fullText.substring(0, MAX_CHARS);
+
     setState(prev => ({ ...prev, input: fullText }));
-  };
+    toast.success("PDF uploaded (optimized) ✅");
 
-  reader.readAsArrayBuffer(file); // for binary PDF
+  } catch (err) {
+    console.error("PDF Error:", err);
+    toast.error("Failed to read PDF ❌");
+  }
 };
-
-
-const extractDocxText = (file) => {
-  const reader = new FileReader();
-
-  reader.onload = async (e) => {
-    const arrayBuffer = e.target.result;
+const extractDocxText = async (file) => {
+  try {
+    const arrayBuffer = await file.arrayBuffer();
 
     const result = await mammoth.extractRawText({ arrayBuffer });
-    const text = result.value;
 
-    setState(prev => ({ ...prev, input: text }));
-  };
+    setState(prev => ({ ...prev, input: result.value }));
+    toast.success("DOCX uploaded ✅");
 
-  reader.readAsArrayBuffer(file); // for .docx
+  } catch (err) {
+    console.error("DOCX Error:", err);
+    toast.error("Failed to read Word file ❌");
+  }
 };
-
- 
 const handleFileUpload = (event) => {
   const file = event.target.files?.[0];
   if (!file) return;
 
-  const type = file.type;
+  const fileName = file.name.toLowerCase();
 
-  if (type === 'text/plain') {
-    reader.readAsText(file); // .txt
-  } else if (type === 'application/pdf') {
-    extractPdfText(file); // use pdfjs-dist
-  } else if (type === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
-    extractDocxText(file); // use mammoth
-  } else {
-    alert('Unsupported file type');
+  // TXT
+  if (fileName.endsWith(".txt")) {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      setState(prev => ({ ...prev, input: e.target.result }));
+      toast.success("TXT uploaded ✅");
+    };
+    reader.readAsText(file);
+  }
+
+  // PDF
+  else if (fileName.endsWith(".pdf")) {
+    extractPdfText(file);
+  }
+
+  // DOCX
+  else if (fileName.endsWith(".docx")) {
+    extractDocxText(file);
+  }
+
+  else {
+    toast.error("Unsupported file type ❌");
   }
 };
-
-
   const handleClearContent = () => {
     setState(prev => ({
       ...prev,
