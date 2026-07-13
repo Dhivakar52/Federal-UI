@@ -187,7 +187,7 @@ function YouTubeScript() {
 
             <div className="mb-4">
               {newsStory.hashtags.map((tag, i) => (
-                <Badge bg="primary" className="me-2" key={i}>{tag.startsWith('#') ? tag : `#${tag}`}</Badge>
+                <Badge bg="primary" className="me-2 w-[81%] whitespace-pre-line" key={i}>{tag.startsWith('#') ? tag : `#${tag}`}</Badge>
               ))}
               <Button variant="outline-secondary" size="sm" className="ms-2" onClick={() => copyToClipboard(newsStory.hashtags.join(' '), 'hashtags')}>
                 {copyingStates.hashtags ? <Check size={16} /> : <Copy size={16} />}

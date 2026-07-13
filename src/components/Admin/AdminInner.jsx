@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import DataTable from 'react-data-table-component';
-import { Edit, Trash2,Plus } from 'lucide-react';
+import { Edit, Trash2, Plus } from 'lucide-react';
 import { format } from 'date-fns';
 import axios from 'axios';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
@@ -9,7 +9,6 @@ import AddUserModal from './AddUserModal';
 import Swal from 'sweetalert2';
 import '../../css/Admin.css';
 import Export from './Export';
-
 
 export const AdminInner = () => {
   const queryClient = useQueryClient();
@@ -20,24 +19,28 @@ export const AdminInner = () => {
   const [currentUser, setCurrentUser] = useState(null);
   const [editName, setEditName] = useState('');
   const [editEmail, setEditEmail] = useState('');
+  const [editRole, setEditRole] = useState('');
+  const [editPassword, setEditPassword] = useState('');
 
   const [newName, setNewName] = useState('');
   const [newEmail, setNewEmail] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [designation, setDesignation] = useState('');
-  const [editRole, setEditRole] = useState('');
-const [editPassword, setEditPassword] = useState('');
 
-const apiUrl = import.meta.env.VITE_API_URL;
-
-
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   // ✅ Fetch all users
-  const { data: users = [], isLoading } = useQuery({
-    queryKey: ['users'],
-    queryFn: () =>
-      axios.get(`${apiUrl}/userDetails`).then((res) => res.data),
-  });
+const { data: users = [], isLoading } = useQuery({
+  queryKey: ['users'],
+  queryFn: () =>
+    axios.get(`${apiUrl}/userDetails`).then((res) => {
+      console.log('📊 API Response:', res.data);
+      console.log('📊 Data structure:', JSON.stringify(res.data, null, 2));
+      return res.data.data || res.data;
+    }),
+});
+
+  
 
   // ✅ Add user mutation
   const addUserMutation = useMutation({
@@ -52,19 +55,14 @@ const apiUrl = import.meta.env.VITE_API_URL;
       setDesignation('');
       Swal.fire('Success', 'User added successfully!', 'success');
     },
-    // onError: () => {
-    //   Swal.fire('Error', 'Failed to add user', 'error');
-    // },
-onError: (error) => {
-  const message =
-    error.response?.data?.message || "Failed to add user";
-
-  if (message.toLowerCase().includes("already exists")) {
-    Swal.fire('Warning', message, 'warning');
-  } else {
-    Swal.fire('Error', message, 'error');
-  }
-}
+    onError: (error) => {
+      const message = error.response?.data?.message || 'Failed to add user';
+      if (message.toLowerCase().includes('already exists')) {
+        Swal.fire('Warning', message, 'warning');
+      } else {
+        Swal.fire('Error', message, 'error');
+      }
+    }
   });
 
   // ✅ Update user mutation
@@ -98,8 +96,8 @@ onError: (error) => {
     setCurrentUser(item);
     setEditName(item.name);
     setEditEmail(item.email);
-    setEditRole(item.role);
-  setEditPassword(item.password || '');
+    setEditRole(item.role || 'user');
+    setEditPassword('');
     setShowModal(true);
   };
 
@@ -115,14 +113,30 @@ onError: (error) => {
       cancelButtonColor: '#3085d6',
     }).then((result) => {
       if (result.isConfirmed) {
-        deleteUserMutation.mutate(item._id);
+        // ✅ Use item.id for Supabase (not item._id)
+        deleteUserMutation.mutate(item.id);
       }
     });
   };
 
   const handleSave = () => {
-    const updatedUser = { ...currentUser, name: editName, email: editEmail,  role: editRole.toLowerCase(), password: editPassword };
-    updateUserMutation.mutate({ id: currentUser._id, updatedData: updatedUser });
+    const updatedUser = {
+      name: editName,
+      email: editEmail,
+      role: editRole.toLowerCase(),
+      designation: currentUser?.designation || ''
+    };
+    
+    // Only include password if it's provided
+    if (editPassword && editPassword.trim() !== '') {
+      updatedUser.password = editPassword;
+    }
+    
+    // ✅ Use currentUser.id for Supabase (not currentUser._id)
+    updateUserMutation.mutate({ 
+      id: currentUser.id, 
+      updatedData: updatedUser 
+    });
   };
 
   const handleAddUser = () => {
@@ -130,7 +144,8 @@ onError: (error) => {
       name: newName,
       email: newEmail,
       password: newPassword,
-      role: designation.toLowerCase(),
+      role: designation.toLowerCase() || 'user',
+      designation: designation || null
     };
     addUserMutation.mutate(newUser);
   };
@@ -141,32 +156,45 @@ onError: (error) => {
     return isNaN(date.getTime()) ? 'Invalid Date' : format(date, 'dd/MM/yyyy hh:mm a');
   };
 
-const filteredUsers = users
-  .filter(user =>
-    user.role !== 'admin' && 
-    (user.name?.toLowerCase().includes(filterText.toLowerCase()) ||
-     user.email?.toLowerCase().includes(filterText.toLowerCase()))
-  )
-  .sort((a, b) => a.name.localeCompare(b.name));
+  // Filter users (exclude admin)
+  // const filteredUsers = Array.isArray(users) 
+  //   ? users
+  //       .filter(user =>
+  //         user.role !== 'admin' && 
+  //         (user.name?.toLowerCase().includes(filterText.toLowerCase()) ||
+  //          user.email?.toLowerCase().includes(filterText.toLowerCase()))
+  //       )
+  //       .sort((a, b) => a.name?.localeCompare(b.name))
+  //   : [];
+  // ✅ Show all users (including admin)
+// ✅ Show all users, but mark admin differently
+const filteredUsers = Array.isArray(users) 
+  ? users
+      .filter(user =>
+        (user.name?.toLowerCase().includes(filterText.toLowerCase()) ||
+         user.email?.toLowerCase().includes(filterText.toLowerCase()))
+      )
+      .sort((a, b) => a.name?.localeCompare(b.name))
+  : [];
 
   const columns = [
     { name: 'Name', selector: (row) => row.name, sortable: true },
     { name: 'Email', selector: (row) => row.email, sortable: true },
-    { name: 'Designation', selector: (row) => row.role, sortable: true },
-    { name: 'Last Login', selector: (row) => formatDate(row.lastLogin) },
-    { name: 'Last Logout', selector: (row) => formatDate(row.lastLogout) },
+    { name: 'Designation', selector: (row) => row.designation || row.role, sortable: true },
+    { name: 'Last Login', selector: (row) => formatDate(row.last_login || row.lastLogin) },
+    { name: 'Last Logout', selector: (row) => formatDate(row.last_logout || row.lastLogout) },
     {
       name: 'Actions',
       cell: (row) => (
         <>
           <Edit
-           color='blue'
+            color='blue'
             size={18}
             onClick={() => handleEdit(row)}
             style={{ cursor: 'pointer', marginRight: 10 }}
           />
           <Trash2
-          color='red'
+            color='red'
             size={18}
             onClick={() => handleDelete(row)}
             style={{ cursor: 'pointer' }}
@@ -207,12 +235,7 @@ const filteredUsers = users
                 Add User <span><Plus size={15} /></span>
               </button>
             </div>
-              <div className=" col-2 mb-3">
-              {/* <button
-                className="btn btn-primary"   
-              >
-                Export Users
-              </button> */}
+            <div className="col-2 mb-3">
               <Export users={filteredUsers} />
             </div>
           </div>
@@ -232,19 +255,19 @@ const filteredUsers = users
       </div>
 
       {/* Edit Modal */}
-     <EditUserModal
-  show={showModal}
-  onClose={() => setShowModal(false)}
-  onSave={handleSave}
-  name={editName}
-  email={editEmail}
-  role={editRole}
-  password={editPassword}
-  setName={setEditName}
-  setEmail={setEditEmail}
-  setRole={setEditRole}
-  setPassword={setEditPassword}
-/>
+      <EditUserModal
+        show={showModal}
+        onClose={() => setShowModal(false)}
+        onSave={handleSave}
+        name={editName}
+        email={editEmail}
+        role={editRole}
+        password={editPassword}
+        setName={setEditName}
+        setEmail={setEditEmail}
+        setRole={setEditRole}
+        setPassword={setEditPassword}
+      />
 
       {/* Add Modal */}
       <AddUserModal
