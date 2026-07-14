@@ -33,7 +33,7 @@ const LoginTemplate = () => {
     setSuccess(null);
 
     try {
-      const response = await axios.post(`${apiUrl}`, { loginId, password });
+      const response = await axios.post(`${apiUrl}`, { email, password });
 
       const { token } = response.data;
       const decoded = decodeJWT(token); 
