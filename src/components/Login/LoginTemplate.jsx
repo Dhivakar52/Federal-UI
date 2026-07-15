@@ -10,61 +10,79 @@ import logoIcon from '../../assets/images/logo.png';
 import '../../css/Login.css';
 
 const LoginTemplate = () => {
-  const [loginId, setLoginId] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const apiUrl = import.meta.env.VITE_API_URL;
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   function decodeJWT(token) {
-  const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
-  return JSON.parse(atob(base64));
-}
-
-
+    try {
+      const base64 = token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/');
+      return JSON.parse(atob(base64));
+    } catch (error) {
+      console.error("Error decoding JWT:", error);
+      return {};
+    }
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(null);
     setSuccess(null);
+    setLoading(true);
 
     try {
-      const response = await axios.post(`${apiUrl}`, { email, password });
+      const response = await axios.post(`${apiUrl}`, { 
+        email: email, 
+        password: password 
+      });
 
-      const { token } = response.data;
-      const decoded = decodeJWT(token); 
-      console.log("Decoded JWT:", decoded);
+      console.log("Login Response:", response.data);
 
-      const { name, email, role } = decoded;
+      const { token, user } = response.data;
 
-      // ✅ Store token and user data in sessionStorage
+      const userName = user?.name || '';
+      const userEmail = user?.email || email;
+      const userRole = user?.role || 'user';
+
+      // Store in localStorage
       localStorage.setItem('token', token);
-      localStorage.setItem('userEmail', email || loginId);
-      localStorage.setItem('userName', name);
-      localStorage.setItem('userRole', role);
+      localStorage.setItem('userEmail', userEmail);
+      localStorage.setItem('userName', userName);
+      localStorage.setItem('userRole', userRole);
 
-      // ✅ Update Redux
+      // Update Redux
       dispatch(login({
-        userName: name,
-        userEmail: email || loginId,
-        userRole: role,
+        userName: userName,
+        userEmail: userEmail,
+        userRole: userRole,
       }));
 
-      setSuccess("Login successful!");
+      // ✅ Show success message
+      setSuccess("Login successful!!");
 
-      // ✅ Navigate based on role
-      if (role?.toLowerCase() === 'admin') {
-        navigate('/admin-dashboard');
-      } else {
-        navigate('/summary');
-      }
+      // ✅ Wait 1.5 seconds before navigating
+      setTimeout(() => {
+        setLoading(false);
+        
+        // Navigate based on role
+        if (userRole?.toLowerCase() === 'admin') {
+          navigate('/admin-dashboard');
+        } else {
+          navigate('/summary');
+        }
+      }, 1500);
+
     } catch (err) {
       console.error("Login error:", err);
-      setError(err.response?.data?.message || 'Login failed');
+      setError(err.response?.data?.message || err.response?.data?.error || 'Login failed');
+      setLoading(false);
     }
   };
 
@@ -74,24 +92,25 @@ const LoginTemplate = () => {
         <Card.Body>
           <Card.Title className="text-center">
             <div className="title_logo">
-            <span>
-              <img src={logoIcon} alt="Logo" className="img-fluid" />
-            </span>
-          </div>
+              <span>
+                <img src={logoIcon} alt="Logo" className="img-fluid" />
+              </span>
+            </div>
           </Card.Title>
 
           {error && <Alert variant="danger">{error}</Alert>}
           {success && <Alert variant="success">{success}</Alert>}
 
           <Form onSubmit={handleSubmit}>
-            <Form.Group controlId="formLoginId">
-              <Form.Label>Email or Login ID</Form.Label>
+            <Form.Group controlId="formEmail">
+              <Form.Label>Email Address</Form.Label>
               <Form.Control
-                type="text"
-                placeholder="Enter your email or login ID"
-                value={loginId}
-                onChange={(e) => setLoginId(e.target.value)}
+                type="email"
+                placeholder="Enter your email address"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
                 required
+                disabled={loading}
               />
             </Form.Group>
 
@@ -104,6 +123,7 @@ const LoginTemplate = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
+                  disabled={loading}
                 />
                 <span
                   className="position-absolute top-50 end-0 translate-middle-y me-2"
@@ -116,15 +136,20 @@ const LoginTemplate = () => {
             </Form.Group>
 
             <div className="d-flex justify-content-between align-items-center mt-3">
-              <Form.Check type="checkbox" id="rememberMe" label="Remember Me" />
-              <a href="#" className="text-primary" style={{ textDecoration: 'none' }}>
+              <Form.Check type="checkbox" id="rememberMe" label="Remember Me" disabled={loading} />
+              <a href="/forgot-password" className="text-primary" style={{ textDecoration: 'none' }}>
                 Forgot Password?
               </a>
             </div>
 
             <div className="text-end mt-5">
-              <Button variant="primary" type="submit" className='btnColor'>
-                Login
+              <Button 
+                variant="primary" 
+                type="submit" 
+                className='btnColor'
+                disabled={loading}
+              >
+                {loading ? 'Logging in...' : 'Login'}
               </Button>
             </div>
           </Form>

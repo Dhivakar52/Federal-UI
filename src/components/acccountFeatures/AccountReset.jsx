@@ -9,7 +9,6 @@ import Swal from 'sweetalert2';
 import { Eye, EyeOff } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
-
 import '../../css/Account.css';
 import '../../css/Trending.css';
 
@@ -18,31 +17,86 @@ const AccountReset = () => {
   const [newPassword, setNewPassword] = useState('');
   const [showOldPassword, setShowOldPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
+  // ✅ Get API URL from environment
+  const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5005';
 
   const handleSubmit = async () => {
-    try {
-      const email = sessionStorage.getItem("userEmail");
+    // ✅ Validation
+    if (!oldPassword || !newPassword) {
+      Swal.fire('Warning', 'Please fill in all fields', 'warning');
+      return;
+    }
 
-      const response = await axios.post('http://localhost:5000/reset-password', {
-        email,
-        oldPassword,
-        newPassword,
+    if (newPassword.length < 6) {
+      Swal.fire('Warning', 'New password must be at least 6 characters long', 'warning');
+      return;
+    }
+
+    if (oldPassword === newPassword) {
+      Swal.fire('Warning', 'New password must be different from old password', 'warning');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      
+      // ✅ Get email from localStorage (not sessionStorage)
+      const email = localStorage.getItem("userEmail") || sessionStorage.getItem("userEmail");
+
+      if (!email) {
+        Swal.fire('Error', 'User email not found. Please login again.', 'error');
+        navigate('/');
+        return;
+      }
+
+      console.log('📝 Resetting password for:', email);
+
+      const response = await axios.post(`${apiUrl}/reset-password`, {
+        email: email,
+        oldPassword: oldPassword,
+        newPassword: newPassword,
       });
 
-      Swal.fire('Success', response.data.message, 'success');
-      setOldPassword('');
-      setNewPassword('');
+      console.log('✅ Password reset response:', response.data);
+
+      Swal.fire({
+        title: 'Success!',
+        text: response.data.message || 'Password updated successfully',
+        icon: 'success',
+        confirmButtonText: 'OK'
+      }).then(() => {
+        setOldPassword('');
+        setNewPassword('');
+        navigate('/account');
+      });
+
     } catch (error) {
-      Swal.fire('Error', error.response?.data?.message || 'Something went wrong', 'error');
+      console.error('❌ Password reset error:', error);
+      
+      const errorMessage = error.response?.data?.message || 
+                          error.response?.data?.error || 
+                          'Something went wrong. Please try again.';
+      
+      Swal.fire({
+        title: 'Error',
+        text: errorMessage,
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
+    } finally {
+      setLoading(false);
     }
   };
-const handleCancel= ()=>{
-  setOldPassword('');
-   setNewPassword('');
-  navigate('/account')
-}
+
+  const handleCancel = () => {
+    setOldPassword('');
+    setNewPassword('');
+    navigate('/account');
+  };
+
   return (
     <Container fluid>
       <Row>
@@ -60,6 +114,7 @@ const handleCancel= ()=>{
                     placeholder="Enter old password"
                     value={oldPassword}
                     onChange={(e) => setOldPassword(e.target.value)}
+                    disabled={loading}
                   />
                   <span
                     onClick={() => setShowOldPassword(!showOldPassword)}
@@ -82,9 +137,10 @@ const handleCancel= ()=>{
                 <Col sm="12" className="position-relative">
                   <Form.Control
                     type={showNewPassword ? 'text' : 'password'}
-                    placeholder="Enter new password"
+                    placeholder="Enter new password (min 6 characters)"
                     value={newPassword}
                     onChange={(e) => setNewPassword(e.target.value)}
+                    disabled={loading}
                   />
                   <span
                     onClick={() => setShowNewPassword(!showNewPassword)}
@@ -100,6 +156,13 @@ const handleCancel= ()=>{
                   </span>
                 </Col>
               </Form.Group>
+
+              {/* Password Requirements */}
+              <div className="password-requirements mb-3">
+                <small className="text-muted">
+                  Password must be at least 6 characters long
+                </small>
+              </div>
             </Form>
 
             {/* Buttons */}
@@ -109,6 +172,7 @@ const handleCancel= ()=>{
                   variant="primary"
                   className='clearBtn BtnSize'
                   onClick={handleCancel}
+                  disabled={loading}
                 >
                   Cancel
                 </Button>
@@ -118,8 +182,9 @@ const handleCancel= ()=>{
                   variant="secondary"
                   className='submitBtn BtnSize'
                   onClick={handleSubmit}
+                  disabled={loading}
                 >
-                  Confirm
+                  {loading ? 'Updating...' : 'Confirm'}
                 </Button>
               </Col>
             </Row>

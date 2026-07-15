@@ -1,6 +1,6 @@
-import React,{useState,useEffect,useContext} from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useSelector } from 'react-redux';
-import { Navbar, Nav, Dropdown, Container, Tooltip, OverlayTrigger, Row, Col,Breadcrumb } from "react-bootstrap";
+import { Navbar, Nav, Dropdown, Container, Tooltip, OverlayTrigger, Row, Col, Breadcrumb } from "react-bootstrap";
 import { Bell, Settings, User } from "lucide-react";
 import { useLocation, useNavigate } from 'react-router-dom';
 import Image from 'react-bootstrap/Image';
@@ -11,11 +11,10 @@ import axios from 'axios';
 const TopMenu = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  //  const { userName, userEmail } = useContext(MenuContext);
-   const apiUrl = import.meta.env.VITE_API_URL;
-   const { userName, userEmail } = useSelector((state) => state.auth);
+  const apiUrl = import.meta.env.VITE_API_URL;
+  const { userName, userEmail } = useSelector((state) => state.auth);
 
-console.log(userName, "Topmenu")
+  console.log(userName, "Topmenu");
 
   const getLabel = () => {
     switch (location.pathname) {
@@ -36,130 +35,109 @@ console.log(userName, "Topmenu")
       case '/custom-gpt/federal-editorial': return 'Federal Editorial';
       case '/federal-bot': return 'The Federal Bot';
       case '/admin-dashboard': return 'Admin Panel';
-       case '/full-story': return 'Full Story';
-        case '/analyst': return 'News Analyst';
+      case '/full-story': return 'Full Story';
+      case '/analyst': return 'News Analyst';
       default: return '';
     }
   };
 
-  // const handleLogout = () => {
-  //   navigate('/');
-  //   sessionStorage.clear();
-  // };
-
-
-
-
+  // ✅ FIXED: Logout with email
   const handleLogout = async () => {
     try {
-        const loginId = localStorage.getItem("userEmail");
+      // ✅ Get email from localStorage (not loginId)
+      const email = localStorage.getItem("userEmail");
 
-        const response = await axios.post(`${apiUrl}/logout`, { loginId });
+      if (!email) {
+        console.error('No email found in localStorage');
+        // Clear everything and redirect
+        localStorage.clear();
+        navigate('/');
+        return;
+      }
 
-        if (response.status === 200) {
-            const { lastLogout } = response.data;
-            console.log(response.data)
+      console.log('📤 Logging out user:', email);
 
-            // Store last logout time
-            localStorage.setItem("lastLogout", lastLogout);
-            
+      // ✅ Send email to backend (matches backend expectation)
+      const response = await axios.post(`${apiUrl}/logout`, { 
+        email: email  // ✅ Changed from loginId to email
+      });
 
-            console.log('Logout successful:', lastLogout);
+      if (response.status === 200) {
+        const { lastLogout } = response.data;
+        console.log('Logout successful:', lastLogout);
 
-            // Clear session storage
-            localStorage.removeItem("userEmail");
-            localStorage.removeItem("userName");
-            localStorage.removeItem("token");
-            localStorage.removeItem("userRole");
-            navigate('/'); // Redirect to login
-        }
+        // Store last logout time
+        localStorage.setItem("lastLogout", lastLogout);
+
+        // Clear all user data
+        localStorage.removeItem("userEmail");
+        localStorage.removeItem("userName");
+        localStorage.removeItem("token");
+        localStorage.removeItem("userRole");
+        localStorage.removeItem("lastLogout");
+
+        // Redirect to login
+        navigate('/');
+      }
     } catch (error) {
-        console.error('Logout error:', error.response?.data || error.message);
+      console.error('Logout error:', error.response?.data || error.message);
+      
+      // Even if API fails, clear local data
+      localStorage.clear();
+      navigate('/');
     }
-};
-
-
-
-
-
-
-
+  };
 
   const AccountNavigation = () => {
     navigate('/account');
   };
+
   return (
     <Navbar bg="light" variant="light" className="shadow-sm mb-4">
       <Container fluid>
-         <Row className="w-100 align-items-end">
-         <Col xl={3} md={6} xs={9}>
-  <Breadcrumb>
-    <Breadcrumb.Item className="breadCrumbMain">Dashboard</Breadcrumb.Item>
-     <span className="mx-2">&gt;</span>
-    <Breadcrumb.Item active className="custom-breadcrumb "> {getLabel()}</Breadcrumb.Item>
-  </Breadcrumb>
-</Col>
-             <Col xl={9} md={6} xs={3}>
-             <Navbar.Toggle aria-controls="navbar-nav" />
-        <Navbar.Collapse id="navbar-nav" className="justify-content-end">
-          <Nav className="align-items-center">
-            {/* <OverlayTrigger placement="bottom" overlay={<Tooltip id="tooltip-notifications">Notifications</Tooltip>}>
-              <Nav.Link href="#notifications" className="d-flex align-items-center">
-                <Bell size={20} className="me-2 d-none d-lg-block" />
-              </Nav.Link>
-            </OverlayTrigger>
+        <Row className="w-100 align-items-end">
+          <Col xl={3} md={6} xs={9}>
+            <Breadcrumb>
+              <Breadcrumb.Item className="breadCrumbMain">Dashboard</Breadcrumb.Item>
+              <span className="mx-2">&gt;</span>
+              <Breadcrumb.Item active className="custom-breadcrumb">{getLabel()}</Breadcrumb.Item>
+            </Breadcrumb>
+          </Col>
+          <Col xl={9} md={6} xs={3}>
+            <Navbar.Toggle aria-controls="navbar-nav" />
+            <Navbar.Collapse id="navbar-nav" className="justify-content-end">
+              <Nav className="align-items-center">
+                <Dropdown align="end">
+                  <Dropdown.Toggle variant="" id="dropdown-profile" className="d-flex align-items-center border-0">
+                    <div className="d-flex align-items-center gap-3 me-2">
+                      <Image
+                        src={`https://ui-avatars.com/api/?name=${userName || 'User'}&background=0D8ABC&color=fff`}
+                        width="40"
+                        roundedCircle
+                      />
+                      <div className="text-start fw-medium">
+                        <p className="mb-0 d-none d-md-block">{userEmail || 'user@email.com'}</p>
+                        <small className="mb-0 d-none d-md-block">{userName || 'User'}</small>
+                      </div>
+                    </div>
+                  </Dropdown.Toggle>
 
-            <OverlayTrigger placement="bottom" overlay={<Tooltip id="tooltip-settings">Settings</Tooltip>}>
-              <Nav.Link href="#settings" className="d-flex align-items-center">
-                <Settings size={20} className="me-2 d-none d-lg-block" />
-              </Nav.Link>
-            </OverlayTrigger> */}
-
-            {/* Profile Dropdown with Letter Avatar */}
-            <Dropdown align="end">
-              <Dropdown.Toggle variant="" id="dropdown-profile" className="d-flex align-items-center border-0">
-                <div className="d-flex align-items-center gap-3 me-2">
-                  {/* <span className="avatar-text">{initial}</span> */}
-<Image
-  src={`https://ui-avatars.com/api/?name=${userName}&background=0D8ABC&color=fff`}
-  width="40"
-  roundedCircle
-/>
-                  <div className=" text-start fw-medium">
-                  <p className="mb-0 d-none d-md-block">{userEmail}</p>
-                  <small className="mb-0 d-none d-md-block">{userName}</small>
-                  </div>
-                 
-                </div>
-                <div>
-
-                </div>
-                {/* <span className="d-none d-md-inline">Profile</span> */}
-              </Dropdown.Toggle>
-
-              <Dropdown.Menu>
-                <Dropdown.Item href="#profile" onClick={AccountNavigation}>
-                  <User size={20} className="me-2" />
-                  View Profile
-                </Dropdown.Item>
-                {/* <Dropdown.Item href="#settings" >
-                  <Settings size={20} className="me-2" />
-                  Account Settings
-                </Dropdown.Item> */}
-                <Dropdown.Divider />
-                <Dropdown.Item onClick={handleLogout}>
-                  <Bell size={20} className="me-2" />
-                  Logout
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          </Nav>
-        </Navbar.Collapse>
-             </Col>
-         </Row>
-     
-
-      
+                  <Dropdown.Menu>
+                    <Dropdown.Item onClick={AccountNavigation}>
+                      <User size={20} className="me-2" />
+                      View Profile
+                    </Dropdown.Item>
+                    <Dropdown.Divider />
+                    <Dropdown.Item onClick={handleLogout}>
+                      <Bell size={20} className="me-2" />
+                      Logout
+                    </Dropdown.Item>
+                  </Dropdown.Menu>
+                </Dropdown>
+              </Nav>
+            </Navbar.Collapse>
+          </Col>
+        </Row>
       </Container>
     </Navbar>
   );

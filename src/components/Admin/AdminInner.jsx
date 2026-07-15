@@ -34,8 +34,8 @@ const { data: users = [], isLoading } = useQuery({
   queryKey: ['users'],
   queryFn: () =>
     axios.get(`${apiUrl}/userDetails?limit=100`).then((res) => {
-      console.log('📊 API Response:', res.data);
-      console.log('📊 Data structure:', JSON.stringify(res.data, null, 2));
+      // console.log('📊 API Response:', res.data);
+      // console.log('📊 Data structure:', JSON.stringify(res.data, null, 2));
       return res.data.data || res.data;
     }),
 });
